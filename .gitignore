@@ -128,3 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+.vs*
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
