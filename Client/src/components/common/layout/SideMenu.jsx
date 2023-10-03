@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import Menu from "../../../constants/Menu";
 const SideMenu = ({ openState = true }) => {
   return (
@@ -10,7 +11,7 @@ const SideMenu = ({ openState = true }) => {
       <ul className="p-4">
         {Menu.map((menuItem) => {
           return (
-            <li className="mb-5 flex">
+            <li key={uuidv4()} className="mb-5 flex">
               {<menuItem.icon />}
               <span className="ml-2"> {menuItem.label}</span>
             </li>

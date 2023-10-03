@@ -12,8 +12,16 @@ const Layout = ({ children }) => {
   return (
     <div className="bg-[#F5F7FD]">
       <Navbar onToggleSidebar={toggleSidebar}/>
-      {children}
+      <div className="flex">
       <SideMenu openState={openState} />
+      <div className="p-5 w-screen">
+      {children}
+      </div>
+    
+
+      </div>
+ 
+     
     </div>
   );
 };
