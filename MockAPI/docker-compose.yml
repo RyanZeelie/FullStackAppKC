@@ -5,6 +5,4 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SWAGGER_JSON=/api/api.yaml
-    volumes:
-      - D:\FullStackApp\FullStackAppKC\MockAPI\:/api
+      - SWAGGER_JSON=https://ryanzeelie.github.io/Data/swagger.json

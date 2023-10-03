@@ -1,0 +1,545 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Class Management API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Swagger Mock Server URL"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Grades",
+      "description": "Grades Information"
+    },
+    {
+      "name": "Classes",
+      "description": "Class Information"
+    },
+    {
+      "name": "Students",
+      "description": "Student Information"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Class": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "GradeId": {
+            "type": "integer"
+          },
+          "StartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "EndDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Grade": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "Student": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "EnglishName": {
+            "type": "string"
+          },
+          "Surname": {
+            "type": "string"
+          },
+          "ChineseName": {
+            "type": "string"
+          },
+          "ClassId": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/grades": {
+      "get": {
+        "tags": ["Grades"],
+        "summary": "List of grades",
+        "description": "Get a list of all the grades",
+        "operationId": "getAllGrades",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of grades",
+            "content": {
+              "application/json": {
+                "example": {
+                  "grades": [
+                    {
+                      "id": 1,
+                      "Name": "YLE4"
+                    },
+                    {
+                      "id": 2,
+                      "Name": "CNC2"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Grades"],
+        "summary": "Create a new grade",
+        "description": "Create a new grade with the given information",
+        "operationId": "createGrade",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Grade"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grade created successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          }
+        }
+      }
+    },
+    "/grades/{id}": {
+      "get": {
+        "tags": ["Grades"],
+        "summary": "Get a grade by ID",
+        "description": "Get a single grade by its ID",
+        "operationId": "getGradeById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the grade to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with the grade",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "Name": "YLE4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Grades"],
+        "summary": "Update a grade by ID",
+        "description": "Update an existing grade with new information",
+        "operationId": "updateGrade",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the grade to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Grade"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Grade updated successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          },
+          "404": {
+            "description": "Grade not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Grades"],
+        "summary": "Delete a grade by ID",
+        "description": "Delete an existing grade by its ID",
+        "operationId": "deleteGrade",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the grade to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Grade deleted successfully"
+          },
+          "404": {
+            "description": "Grade not found"
+          }
+        }
+      }
+    },
+    "/classes": {
+      "get": {
+        "tags": ["Classes"],
+        "summary": "List of classes",
+        "description": "Get a list of all the classes",
+        "operationId": "getAllClasses",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of classes",
+            "content": {
+              "application/json": {
+                "example": {
+                  "classes": [
+                    {
+                      "id": 1,
+                      "Name": "Lemon",
+                      "StartDate": "2023-02-04",
+                      "EndDate": "2023-09-09"
+                    },
+                    {
+                      "id": 1,
+                      "Name": "Plum",
+                      "StartDate": "2023-02-04",
+                      "EndDate": null
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Classes"],
+        "summary": "Create a new class",
+        "description": "Create a new class with the given information",
+        "operationId": "createClass",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Class created successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          }
+        }
+      }
+    },
+    "/classes/{id}": {
+      "get": {
+        "tags": ["Classes"],
+        "summary": "Get a class by ID",
+        "description": "Get a single class by its ID",
+        "operationId": "getClassById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the class to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with the class",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "Name": "Lemon",
+                  "StartDate": "2023-02-04",
+                  "EndDate": "2023-09-09"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Classes"],
+        "summary": "Update a class by ID",
+        "description": "Update an existing class with new information",
+        "operationId": "updateClass",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the class to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Class updated successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          },
+          "404": {
+            "description": "Class not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Classes"],
+        "summary": "Delete a class by ID",
+        "description": "Delete an existing class by its ID",
+        "operationId": "deleteClass",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the class to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Class deleted successfully"
+          },
+          "404": {
+            "description": "Class not found"
+          }
+        }
+      }
+    },
+    "/students": {
+      "get": {
+        "tags": ["Students"],
+        "summary": "List of students",
+        "description": "Get a list of all the students",
+        "operationId": "getAllStudents",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of students",
+            "content": {
+              "application/json": {
+                "example": {
+                  "students": [
+                    {
+                      "id": 1,
+                      "EnglishName": "Orville",
+                      "Surname": "Wright",
+                      "ChineseName": "奥维尔赖特",
+                      "ClassId": 1
+                    },
+                    {
+                      "id": 2,
+                      "EnglishName": "Lorin",
+                      "Surname": "Wright",
+                      "ChineseName": "洛林赖特",
+                      "ClassId": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Students"],
+        "summary": "Create a new student",
+        "description": "Create a new student with the given information",
+        "operationId": "createStudent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Student created successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          }
+        }
+      }
+    },
+    "/students/{id}": {
+      "get": {
+        "tags": ["Students"],
+        "summary": "Get a student by ID",
+        "description": "Get a single student by their ID",
+        "operationId": "getStudentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the student to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with the student",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "EnglishName": "Orville",
+                  "Surname": "Wright",
+                  "ChineseName": "奥维尔赖特",
+                  "ClassId": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Students"],
+        "summary": "Update a student by ID",
+        "description": "Update an existing student with new information",
+        "operationId": "updateStudent",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the student to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Student updated successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid input"
+          },
+          "404": {
+            "description": "Student not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Students"],
+        "summary": "Delete a student by ID",
+        "description": "Delete an existing student by their ID",
+        "operationId": "deleteStudent",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the student to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Student deleted successfully"
+          },
+          "404": {
+            "description": "Student not found"
+          }
+        }
+      }
+    }
+  }
+}
