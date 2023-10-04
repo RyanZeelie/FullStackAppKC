@@ -3,6 +3,11 @@
 ### Wireframe link : 
 - https://www.figma.com/file/3kAbxE6w0EjL3rN1pGK9AY/FullStackAppKC?type=design&node-id=0%3A1&mode=design&t=mCSLthSBcce1xghz-1
 
+## MockAPI :
+- CD into the MockAPI folder
+- docker compose up
+- Navigate to http://localhost:8080
+
 ## Migrations : 
 - CD into the flywayMigrations folder
 - ### Create a flyway image
