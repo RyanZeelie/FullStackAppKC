@@ -1,0 +1,8 @@
+CREATE TABLE Class (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    GradeId INT NOT NULL,
+    StartDate DATETIME,
+    EndDate DATETIME,
+    FOREIGN KEY (GradeId) REFERENCES Grade(Id)
+);
