@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "Id": 1,
+      "EnglishName": "John",
+      "Surname": "Doe",
+      "ChineseName": "SomeChineseName",
+      "ClassId": 1
+    },
+    {
+      "Id": 2,
+      "EnglishName": "Jane",
+      "Surname": "Doe",
+      "ChineseName": "SomeChineseName",
+      "ClassId": 2
+    }
+  ]
+}

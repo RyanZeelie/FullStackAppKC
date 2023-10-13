@@ -1,21 +1,33 @@
 import React from "react";
 
-const Select = ({ lableFor = "", children, id = "" }) => {
+const Select = ({
+  label = "Define your label",
+  children,
+  name = "",
+  Id = "",
+  value = "",
+  onChange = () => {},
+  error=""
+}) => {
   return (
-    <>
+    <div className="mb-4">
       <label
-        htmlFor={lableFor}
-        class="block mb-2 text-sm font-medium text-gray-500 "
+        htmlFor={Id}
+        className="block text-gray-700 text-sm font-bold mb-2"
       >
-        {lableFor}
+        {label}
       </label>
       <select
-        id={id}
-        class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        id={Id}
+        name={name}
+        value={value}
+        className={`border ${error === "" ? "border-gray-300" : "border-red-300"} p-2 rounded-md focus:outline-none focus:ring-2 ${error === "" ? "focus:ring-blue-600" : "focus:ring-red-600"} focus:border-transparent w-full`}
+        onChange={({ target }) => onChange(target)}
       >
         {children}
       </select>
-    </>
+      <div className="text-red-300">{error}</div>
+    </div>
   );
 };
 

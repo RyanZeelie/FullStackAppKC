@@ -43,7 +43,7 @@ const DataGrid = ({ columns = [], data = [] }) => {
 
       {/* table */}
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400 ">
           <tr className="w-auto">
             {columns.map((column) => {
               return (
@@ -55,7 +55,7 @@ const DataGrid = ({ columns = [], data = [] }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((rowItem, index) => {
+          { !data.length ? <tr><td className="text-center bg-white border-b border-gray-200 hover:bg-gray-400 hover:text-white hover:bg-gray-300">No Data</td></tr> : data.map((rowItem, index) => {
             return (
               <tr
                 className="bg-white border-b border-gray-200 hover:bg-gray-400 hover:text-white hover:bg-gray-300"
@@ -64,15 +64,13 @@ const DataGrid = ({ columns = [], data = [] }) => {
                 {columns.map((column) => {
                   if (column?.renderCell) {
                     return (
-                      <td className={"px-6 py-4"}>{column?.renderCell()}</td>
+                      <td key={uuidv4()} className={"px-6 py-4 w-auto"}>{column?.renderCell(rowItem)}</td>
                     );
                   } else {
                     return (
                       <td
                         key={uuidv4()}
-                        className={`px-6 py-4 ${
-                          index === data.length - 1 ? "w-full" : "w-auto"
-                        }`}
+                        className={`px-6 py-4 w-auto text-gray-900`}
                       >
                         {rowItem[column.dataIdentifier]}
                       </td>
