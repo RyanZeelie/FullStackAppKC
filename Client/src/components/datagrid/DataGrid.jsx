@@ -1,14 +1,13 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmButton from "../common/buttons/ConfirmButton";
-import Select from "../common/inputs/Select";
 
-const DataGrid = ({ columns = [], data = [] }) => {
+const DataGrid = ({ columns = [], data = [], action=()=>{} }) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
       {/* Header Tools */}
       <div className="flex justify-between items-center px-4">
-        <ConfirmButton label="Create" />
+        <ConfirmButton label="Create" action={action}/>
         <div className="pb-4 p-2 bg-white">
           <label htmlFor="table-search" className="sr-only">
             Search
