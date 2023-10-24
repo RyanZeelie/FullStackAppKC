@@ -7,6 +7,7 @@ import Grades from './pages/grades/Grades'
 import Classes from './pages/classes/Classes'
 import Students from './pages/students/Students'
 import Dashboard from './pages/dashboard/Dashboard'
+import Overview from './pages/overview/Overview';
 function App() {
  
 
@@ -18,6 +19,7 @@ function App() {
       <Route path='/grades' element={<Grades/>} />
       <Route path='/classes' element={<Classes/>} />
       <Route path='/students' element={<Students/>} />
+      <Route path='/overview/:gradeId' element={<Overview/>} />
       </Routes>
     </Layout>
   );
