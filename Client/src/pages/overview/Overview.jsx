@@ -65,18 +65,16 @@ export default function Overview() {
       dataIdentifier: "Book",
     },
   ];
-  return<>
-    
-        {tempData.map((classData) => {
-          return (
-            <Accordion title={classData.ClassName}>
-          
-              <DataGrid columns={columns} data={classData.data} />
-            </Accordion>
-          );
-        })}
-    
-      
-   
-    </>;
+  
+  return (
+    <>
+      {tempData.map((classData) => {
+        return (
+          <Accordion title={classData.ClassName}>
+            <DataGrid columns={columns} data={classData.data} />
+          </Accordion>
+        );
+      })}
+    </>
+  );
 }
