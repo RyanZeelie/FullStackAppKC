@@ -1,8 +1,7 @@
-﻿namespace CMApi.Models.DomainModels
+﻿namespace CMApi.Models.DomainModels;
+
+public class Course
 {
-    public class Course
-    {
-        public int Id { get; set; }
-        public string CourseName { get; set; }
-    }
+    public int Id { get; set; }
+    public string CourseName { get; set; }
 }
