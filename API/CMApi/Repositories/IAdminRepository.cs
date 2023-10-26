@@ -4,16 +4,19 @@ namespace CMApi.Repositories
 {
     public interface IAdminRepository
     {
-        List<Grade> GetGrades();
-        List<Course> GetCourses();
-        List<Level> GetLevels();
+        Task<IEnumerable<Grade>> GetGrades();
+        Task<IEnumerable<Course>> GetCourses();
+        Task<IEnumerable<Level>> GetLevels();
+        Task<IEnumerable<GradeCourse>> GetGradesCourses();
 
-        void UpdateGrade(Grade grade);
-        void UpdateCourse(Course grade);
-        void UpdateLevel(Level grade);
+        Task UpdateGrade(Grade grade);
+        Task UpdateCourse(Course grade);
+        Task UpdateLevel(Level grade);
+        Task UpdateGradeCourse(GradeCourse gradeCourse);
 
-        void CreateGrade(Grade grade);
-        void CreateCourse(Course grade);
-        void CreateLevel(Level grade);
+        Task CreateGrade(Grade grade);
+        Task CreateCourse(Course grade);
+        Task CreateLevel(Level grade);
+        Task CreateGradeCourse(GradeCourse gradeCourse);
     }
 }

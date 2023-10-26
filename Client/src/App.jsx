@@ -8,6 +8,9 @@ import Classes from "./pages/classes/Classes";
 import Students from "./pages/students/Students";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Overview from "./pages/overview/Overview";
+import Courses from "./pages/courses/Courses";
+import Levels from "./pages/levels/Levels";
+import GradesCourse from "./pages/gradesCourse/GradesCourse";
 function App() {
   
   return (
@@ -15,6 +18,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/grades" element={<Grades />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/levels" element={<Levels />} />
+        <Route path="/gradeCourse" element={<GradesCourse />} />
         <Route path="/classes" element={<Classes />} />
         <Route path="/students" element={<Students />} />
         <Route path="/overview/:gradeId" element={<Overview />} />

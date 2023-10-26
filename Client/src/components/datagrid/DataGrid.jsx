@@ -1,8 +1,9 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmButton from "../common/buttons/ConfirmButton";
+import DataGridSpinner from "../common/loadingUi/DataGridSpinner";
 
-const DataGrid = ({ columns = [], data = [], action=()=>{} }) => {
+const DataGrid = ({ columns = [], data = [], action=()=>{}, loading = false }) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
       {/* Header Tools */}
@@ -41,7 +42,7 @@ const DataGrid = ({ columns = [], data = [], action=()=>{} }) => {
       </div>
 
       {/* table */}
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      {loading ? <DataGridSpinner/> :  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400 ">
           <tr className="w-auto">
             {columns.map((column) => {
@@ -80,7 +81,8 @@ const DataGrid = ({ columns = [], data = [], action=()=>{} }) => {
             );
           })}
         </tbody>
-      </table>
+      </table>}
+     
       <div className="text-gray-500 w-full flex flex-row gap-10 justify-end p-4">
         <p> Total Rows : {data?.length}</p>
       </div>

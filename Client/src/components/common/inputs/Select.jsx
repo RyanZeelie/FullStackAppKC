@@ -6,7 +6,7 @@ const Select = ({
   name = "",
   Id = "",
   value = "",
-  onChange = () => {},
+  handleChange =()=>{},
   error=""
 }) => {
   return (
@@ -22,7 +22,7 @@ const Select = ({
         name={name}
         value={value}
         className={`border ${error === "" ? "border-gray-300" : "border-red-300"} p-2 rounded-md focus:outline-none focus:ring-2 ${error === "" ? "focus:ring-blue-600" : "focus:ring-red-600"} focus:border-transparent w-full`}
-        onChange={({ target }) => onChange(target)}
+        onChange={handleChange}
       >
         {children}
       </select>

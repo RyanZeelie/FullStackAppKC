@@ -3,8 +3,6 @@
 namespace CMApi.Data;
 public class DataContext : IDataContext
 {
-
-    private readonly IConfiguration _configuration;
     public IDbConnection DbConnection { get; set; }
     public IDbTransaction DbTransaction { get; set; }
     public DataContext(IDbConnection dbConnection)

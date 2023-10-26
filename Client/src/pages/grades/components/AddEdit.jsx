@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../../../components/common/inputs/Input";
 
 function AddEdit({ values, handleChange, errors }) {
+
   return (
     <>
       <Input
         label="Grade Name"
-        name={"Name"}
-        id="Name"
-        value={values.Name}
+        name={"name"}
+        id="name"
+        value={values.name}
         onChange={handleChange}
-        error={errors.Name}
+        error={errors.name}
       />
     </>
   );

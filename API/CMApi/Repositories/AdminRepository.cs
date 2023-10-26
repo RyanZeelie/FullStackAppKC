@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using CMApi.Data;
 using CMApi.Models.DomainModels;
+using Dapper;
 
 namespace CMApi.Repositories;
 
 public class AdminRepository : IAdminRepository
 {
-    private IDbConnection _connection { get { return _dataContext.DbConnection; } }
+    private IDbConnection _dbConnection { get { return _dataContext.DbConnection; } }
     private IDbTransaction _dbTransaction { get { return _dataContext.DbTransaction; } }
     private IDataContext _dataContext;
 
@@ -14,48 +15,118 @@ public class AdminRepository : IAdminRepository
     {
         _dataContext = dataContext;
     }
-    public void CreateCourse(Course grade)
+
+    public async Task<IEnumerable<Course>> GetCourses()
     {
-        throw new NotImplementedException();
+        var query = @"SELECT
+                        * 
+                    FROM Course";
+
+        return await _dbConnection.QueryAsync<Course>(query, _dbTransaction);
     }
 
-    public void CreateGrade(Grade grade)
+    public async Task<IEnumerable<Grade>> GetGrades()
     {
-        throw new NotImplementedException();
+        var query = @"SELECT
+                        * 
+                    FROM Grade";
+
+        return await _dbConnection.QueryAsync<Grade>(query, _dbTransaction);
     }
 
-    public void CreateLevel(Level grade)
+    public async Task<IEnumerable<Level>> GetLevels()
     {
-        throw new NotImplementedException();
+        var query = @"SELECT
+                        * 
+                    FROM Level";
+
+        return await _dbConnection.QueryAsync<Level>(query, _dbTransaction);
     }
 
-    public List<Course> GetCourses()
+    public async Task<IEnumerable<GradeCourse>> GetGradesCourses()
     {
-        throw new NotImplementedException();
+        var query = @"SELECT
+                        gc.*,
+                        g.Name AS GradeName,
+                        c.Name AS CourseName
+                    FROM GradeCourse gc
+                    JOIN Grade g
+                        ON g.Id = gc.GradeId
+                    JOIN Course c
+                        ON c.Id = gc.CourseId ";
+
+        return await _dbConnection.QueryAsync<GradeCourse>(query, _dbTransaction);
     }
 
-    public List<Grade> GetGrades()
+
+    public Task CreateCourse(Course course)
     {
-        throw new NotImplementedException();
+        var query = @"INSERT INTO Course (Name)
+                    VALUES (@Name)";
+
+        return _dbConnection.ExecuteAsync(query, new { Name = course.Name }, _dbTransaction);
     }
 
-    public List<Level> GetLevels()
+    public Task CreateGrade(Grade grade)
     {
-        throw new NotImplementedException();
+        var query = @"INSERT INTO Grade (Name)
+                    VALUES (@Name)";
+
+        return _dbConnection.ExecuteAsync(query, new { Name = grade.Name }, _dbTransaction);
     }
 
-    public void UpdateCourse(Course grade)
+    public Task CreateLevel(Level level)
     {
-        throw new NotImplementedException();
+        var query = @"INSERT INTO Level (Name)
+                    VALUES (@Name)";
+
+        return _dbConnection.ExecuteAsync(query, new { Name = level.Name }, _dbTransaction);
     }
 
-    public void UpdateGrade(Grade grade)
+    public Task CreateGradeCourse(GradeCourse gradeCourse)
     {
-        throw new NotImplementedException();
+        var query = @"INSERT INTO GradeCourse (GradeId, CourseId)
+                    VALUES (@GradeId, @CourseId)";
+
+        return _dbConnection.ExecuteAsync(query, gradeCourse, _dbTransaction);
     }
 
-    public void UpdateLevel(Level grade)
+
+    public Task UpdateCourse(Course course)
     {
-        throw new NotImplementedException();
+        var query = @"UPDATE Course
+                    SET Name = @Name 
+                    WHERE Id = @Id";
+
+        return _dbConnection.ExecuteAsync(query, course, _dbTransaction);
+    }
+
+    public Task UpdateGrade(Grade grade)
+    {
+        var query = @"UPDATE Grade
+                    SET Name = @Name 
+                    WHERE Id = @Id";
+
+        return _dbConnection.ExecuteAsync(query, grade, _dbTransaction);
+    }
+
+    public Task UpdateLevel(Level level)
+    {
+        var query = @"UPDATE Level
+                    SET Name = @Name 
+                    WHERE Id = @Id"
+        ;
+
+        return _dbConnection.ExecuteAsync(query, level, _dbTransaction);
+    }
+
+    public Task UpdateGradeCourse(GradeCourse gradeCourse)
+    {
+        var query = @"UPDATE GradeCourse
+                    SET GradeId = @GradeId, CourseId = @CourseId 
+                    WHERE Id = @Id"
+        ;
+
+        return _dbConnection.ExecuteAsync(query, gradeCourse, _dbTransaction);
     }
 }

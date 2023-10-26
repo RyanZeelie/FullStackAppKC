@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConfirmButton from "../buttons/ConfirmButton";
 import CancelButton from "../buttons/CancelButton";
 
@@ -9,8 +9,8 @@ const FormModal = ({
   children,
   modalTitle,
   disabled = true,
+  submit
 }) => {
-
 
   return (
     <>
@@ -35,7 +35,7 @@ const FormModal = ({
               {/* Modal Footer */}
               <div className="flex items-center justify-start p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <div>
-                  <ConfirmButton label="Submit" disabled={disabled} />
+                  <ConfirmButton label="Submit" disabled={disabled} action={submit} />
                 </div>
                 <div className="ml-2">
                   <CancelButton label="Cancel" action={()=>handleModal()} />

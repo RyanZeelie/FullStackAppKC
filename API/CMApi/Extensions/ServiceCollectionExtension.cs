@@ -9,7 +9,7 @@ namespace CMApi.Extensions
     {
         public static IServiceCollection AddDataContext(this IServiceCollection services, IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("connectionString");
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddTransient(_ => new SqlConnection(connectionString));
             services.AddTransient<IDataContext, DataContext>(provider =>
@@ -24,6 +24,8 @@ namespace CMApi.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IClassService, ClassService>();
+            services.AddTransient<IStudentService, StudentService>();
 
             return services;
         }
@@ -31,6 +33,8 @@ namespace CMApi.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IAdminRepository, AdminRepository>();
+            services.AddTransient<IClassRepository, ClassRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
 
             return services;
         }
