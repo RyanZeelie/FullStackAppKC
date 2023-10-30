@@ -2,7 +2,7 @@
 
 public class Class
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public int GradeCourseId { get; set; }
     public string? GradeName { get; set; }  

@@ -6,8 +6,9 @@ const Select = ({
   name = "",
   Id = "",
   value = "",
-  handleChange =()=>{},
-  error=""
+  handleChange = () => {},
+  error = "",
+  disabled = false,
 }) => {
   return (
     <div className="mb-4">
@@ -18,10 +19,15 @@ const Select = ({
         {label}
       </label>
       <select
+        disabled={disabled}
         id={Id}
         name={name}
         value={value}
-        className={`border ${error === "" ? "border-gray-300" : "border-red-300"} p-2 rounded-md focus:outline-none focus:ring-2 ${error === "" ? "focus:ring-blue-600" : "focus:ring-red-600"} focus:border-transparent w-full`}
+        className={`border ${
+          error === "" ? "border-gray-300" : "border-red-300"
+        } p-2 rounded-md focus:outline-none focus:ring-2 ${
+          error === "" ? "focus:ring-blue-600" : "focus:ring-red-600"
+        } focus:border-transparent w-full`}
         onChange={handleChange}
       >
         {children}

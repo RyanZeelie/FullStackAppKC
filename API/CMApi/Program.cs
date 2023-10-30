@@ -1,4 +1,5 @@
 using CMApi.Extensions;
+using CMApi.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseCors(x => 
     x.AllowAnyOrigin()

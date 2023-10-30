@@ -66,7 +66,6 @@ function GradesCourse() {
       renderCell: (row) => {
         return (
           <>
-          
             <button onClick={() => handleEdit(row)}><EditIcon/>Edit</button>
           </>
         );
@@ -77,7 +76,7 @@ function GradesCourse() {
       dataIdentifier: "gradeName",
     },
     {
-      header: "Level Name",
+      header: "Course Name",
       dataIdentifier: "courseName",
     },
   ];

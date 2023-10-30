@@ -1,18 +1,25 @@
 import React from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-
+import {getDashboarData} from '../../api/managementAPI'
+import { v4 as uuidv4 } from "uuid";
 function Dashboard() {
+  const {data = [], isFetching} = useQuery(['dashboard'], getDashboarData)
   return (
     <>
-      <Link to={"/overview/2"}>
-        <div class="max-w-sm rounded-lg overflow-hidden shadow-lg m-4 bg-white">
-          <div class="px-6 py-4">
-            <div class="font-bold text-xl mb-2">Grade Name</div>
-            <p class="text-gray-700 text-base">Number of Students: 30</p>
-            <p class="text-gray-700 text-base">Average Score: 85%</p>
-          </div>
+    {isFetching ? <p>Loading</p> : data.dashboardCards.map(gradeOverview=>{
+      return <Link key={uuidv4()} to={`/overview/${gradeOverview.gradeCourseId}`}>
+      <div className="max-w-sm rounded-lg overflow-hidden shadow-lg m-4 bg-white">
+        <div className="px-6 py-4">
+          <div className="font-bold text-xl mb-2">{`${gradeOverview.gradeName} - ${gradeOverview.courseName}`}</div>
+          <p className="text-gray-700 text-base p-1">{`Total Students: ${gradeOverview.studentCount}` }</p>
+          <p className="text-gray-700 text-base p-1">{`Total Classes: ${gradeOverview.classCount}` }</p>
+          <p className="text-gray-700 text-base p-1">Average Score: TODO</p>
         </div>
-      </Link>
+      </div>
+    </Link>
+    })}
+      
     </>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.css"; // You can customize this CSS file as needed
 import Layout from "./components/common/layout/Layout";
-import DataGrid from "./components/datagrid/DataGrid";
 import { Routes, Route } from "react-router-dom";
 import Grades from "./pages/grades/Grades";
 import Classes from "./pages/classes/Classes";

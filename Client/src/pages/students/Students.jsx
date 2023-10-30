@@ -40,20 +40,29 @@ function Grades() {
   });
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { values, handleChange, isValid, errors, setValues, submitForm } =
-    useFormik({
-      initialValues: {
-        id: 0,
-        name: "",
-      },
-      validationSchema: validation,
-      validateOnMount: true,
-      onSubmit: (vals) => {
-        vals.id === 0
-          ? createStudentMutation(vals)
-          : updateStudentMutation(vals);
-      },
-    });
+  const {
+    values,
+    handleChange,
+    isValid,
+    errors,
+    setValues,
+    submitForm,
+    setFieldValue,
+    validateField
+  } = useFormik({
+    initialValues: {
+      id: 0,
+      englishName: "",
+      surname: "",
+      chineseName: "",
+      classId: 0,
+    },
+    validationSchema: validation,
+    validateOnMount: true,
+    onSubmit: (vals) => {
+      vals.id === 0 ? createStudentMutation(vals) : updateStudentMutation(vals);
+    },
+  });
 
   const handleModal = () => {
     setModalOpen(!modalOpen);
@@ -63,6 +72,7 @@ function Grades() {
     handleModal();
   };
   const handleEdit = async (selectedRow) => {
+    console.log(selectedRow);
     await setValues(selectedRow, true);
     handleModal();
   };
@@ -115,7 +125,13 @@ function Grades() {
         disabled={!isValid}
         submit={submitForm}
       >
-        <AddEdit values={values} handleChange={handleChange} errors={errors} />
+        <AddEdit
+          values={values}
+          handleChange={handleChange}
+          errors={errors}
+          setFieldValue={setFieldValue}
+          validateField={validateField}
+        />
       </FormModal>
       <Datagrid
         columns={columns}

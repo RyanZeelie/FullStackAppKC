@@ -2,6 +2,7 @@
 using System.Data;
 using CMApi.Models.DomainModels;
 using Dapper;
+using CMApi.Models.Responses;
 
 namespace CMApi.Repositories;
 
@@ -52,5 +53,24 @@ public class StudentRepository : IStudentRepository
                         WHERE Id = @Id";
 
         return _dbConnection.ExecuteAsync(query, student, _dbTransaction);
+    }
+
+    public async Task<IEnumerable<StudentResult>> GetStudentOverView(int classId)
+    {
+        var query = @"SELECT 
+	                    s.Id AS StudentId,
+	                    s.EnglishName,
+	                    s.Surname,
+	                    s.ChineseName,
+	                    45 AS Listening,
+	                    24 AS Reading_Writing,
+	                    1 AS TestTaken,
+	                    (45 + 24) AS Total,
+	                    'Some recc' As Recommendation,
+	                    'BookTODO' AS Book
+                    FROM Student s
+                    WHERE s.ClassId = @ClassId";
+
+        return await _dbConnection.QueryAsync<StudentResult>(query,new { classId }, _dbTransaction);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CMApi.Models.DomainModels;
+using CMApi.Models.Responses;
 using CMApi.Repositories;
 
 namespace CMApi.Services;
@@ -23,5 +24,10 @@ public class StudentService : IStudentService
     public Task UpdateStudent(Student student)
     {
         return _studentRepository.UpdateStudent(student);
+    }
+
+    public Task<IEnumerable<StudentResult>> GetStudentOverView(int classId)
+    {
+       return _studentRepository.GetStudentOverView(classId);
     }
 }

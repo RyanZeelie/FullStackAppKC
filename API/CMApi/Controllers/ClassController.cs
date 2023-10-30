@@ -1,4 +1,6 @@
 ﻿using CMApi.Models.DomainModels;
+using CMApi.Models.Requests;
+using CMApi.Repositories;
 using CMApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace CMApi.Controllers;
 public class ClassController : ControllerBase
 {
     private readonly IClassService _classService;
+    private readonly IClassRepository _classRepository;
 
-    public ClassController(IClassService classService)
+    public ClassController(IClassService classService, IClassRepository classRepository)
     {
         _classService = classService;
+        _classRepository = classRepository;
     }
 
     [HttpGet]
@@ -38,6 +42,23 @@ public class ClassController : ControllerBase
     public async Task<IActionResult> UpdateClass(Class classModel)
     {
         await _classService.UpdateClass(classModel);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("/start-class")]
+    public async Task<IActionResult> StartClass(StartEndClassRequest request)
+    {
+        await _classRepository.StartClass(request.ClassId);
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("/end-class")]
+    public async Task<IActionResult> EndClass(StartEndClassRequest request)
+    {
+        await _classRepository.EndClass(request.ClassId);
 
         return Ok();
     }

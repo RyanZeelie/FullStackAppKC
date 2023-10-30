@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import ConfirmButton from "../common/buttons/ConfirmButton";
 import DataGridSpinner from "../common/loadingUi/DataGridSpinner";
 
-const DataGrid = ({ columns = [], data = [], action=()=>{}, loading = false }) => {
+const DataGrid = ({ columns = [], data = [], action=()=>{}, actionLabel="Create", loading = false }) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
       {/* Header Tools */}
       <div className="flex justify-between items-center px-4">
-        <ConfirmButton label="Create" action={action}/>
+        <ConfirmButton label={actionLabel} action={action}/>
         <div className="pb-4 p-2 bg-white">
           <label htmlFor="table-search" className="sr-only">
             Search
@@ -55,10 +55,10 @@ const DataGrid = ({ columns = [], data = [], action=()=>{}, loading = false }) =
           </tr>
         </thead>
         <tbody>
-          { !data.length ? <tr><td className="text-center bg-white border-b border-gray-200 hover:bg-gray-400 hover:text-white hover:bg-gray-300">No Data</td></tr> : data.map((rowItem, index) => {
+          { !data.length ? <tr><td className="text-center bg-white border-b border-gray-200 hover:bg-gray-400 hover:text-black hover:bg-gray-300">No Data</td></tr> : data.map((rowItem, index) => {
             return (
               <tr
-                className="bg-white border-b border-gray-200 hover:bg-gray-400 hover:text-white hover:bg-gray-300"
+                className="bg-white border-b border-gray-200 hover:bg-blue-200 hover:text-black hover:bg-gray-300"
                 key={uuidv4()}
               >
                 {columns.map((column) => {

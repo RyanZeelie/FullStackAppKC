@@ -4,13 +4,31 @@ import Select from "../../../components/common/inputs/Select";
 import { useQuery } from "react-query";
 import { getClasses } from "../../../api/classesAPI";
 import { v4 as uuidv4 } from "uuid";
-function AddEdit({ values, handleChange, errors }) {
+function AddEdit({
+  values,
+  handleChange,
+  errors,
+  setFieldValue,
+  validateField,
+}) {
   const [grade, setGrade] = useState("");
   const { data: classes = [] } = useQuery(["classes"], getClasses, {
     onSuccess: (d) => console.log(d),
   });
   let grades = [...new Set(classes.map((c) => c.gradeName))];
 
+  useEffect(() => {
+    if (grade === "") {
+      setFieldValue("classId", 0, true);
+      validateField("classId");
+    }
+  }, [grade]);
+
+  useEffect(() => {
+    if (values.id != 0) {
+      setGrade(values.gradeName);
+    }
+  }, [values.id]);
   return (
     <>
       <Input
@@ -55,6 +73,7 @@ function AddEdit({ values, handleChange, errors }) {
         value={values.classId}
         handleChange={handleChange}
         error={errors.classId}
+        disabled={grade === ""}
       >
         <option value={0}>Select a Class</option>
         {classes

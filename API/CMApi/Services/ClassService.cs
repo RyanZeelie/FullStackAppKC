@@ -16,6 +16,11 @@ public class ClassService : IClassService
         return _classRepository.GetClasses();
     }
 
+    public async Task<IEnumerable<Class>> GetClassesByGradeCourseId (int gradeCourseId)
+    {
+        return await _classRepository.GetClassesByGradeCourseId(gradeCourseId);
+    }
+
     public Task CreateClass(Class classModel)
     {
         return _classRepository.CreateClass(classModel);
