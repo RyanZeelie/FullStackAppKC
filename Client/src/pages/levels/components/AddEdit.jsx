@@ -13,6 +13,14 @@ function AddEdit({ values, handleChange, errors }) {
         onChange={handleChange}
         error={errors.name}
       />
+        <Input
+        label="Total Score"
+        name={"total"}
+        id="total"
+        value={values.total}
+        onChange={handleChange}
+        error={errors.total}
+      />
     </>
   );
 }

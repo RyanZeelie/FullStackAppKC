@@ -77,10 +77,10 @@ public class AdminRepository : IAdminRepository
 
     public Task CreateLevel(Level level)
     {
-        var query = @"INSERT INTO Level (Name)
-                    VALUES (@Name)";
+        var query = @"INSERT INTO Level (Name, Total)
+                    VALUES (@Name, @Total)";
 
-        return _dbConnection.ExecuteAsync(query, new { Name = level.Name }, _dbTransaction);
+        return _dbConnection.ExecuteAsync(query, new { Name = level.Name, Total = level.Total }, _dbTransaction);
     }
 
     public Task CreateGradeCourse(GradeCourse gradeCourse)
@@ -113,7 +113,7 @@ public class AdminRepository : IAdminRepository
     public Task UpdateLevel(Level level)
     {
         var query = @"UPDATE Level
-                    SET Name = @Name 
+                    SET Name = @Name, Total = @Total 
                     WHERE Id = @Id"
         ;
 

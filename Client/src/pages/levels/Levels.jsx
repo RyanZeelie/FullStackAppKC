@@ -12,6 +12,7 @@ import {toast} from 'react-toastify'
 const initialFormState = {
   id: 0,
   name: "",
+  total : 0
 };
 
 function Levels() {
@@ -73,6 +74,10 @@ function Levels() {
     {
       header: "Level Name",
       dataIdentifier: "name",
+    },
+    {
+      header: "Total Score",
+      dataIdentifier: "total",
     },
   ];
   return (
