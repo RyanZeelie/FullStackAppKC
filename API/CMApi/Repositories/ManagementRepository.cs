@@ -21,7 +21,7 @@ public class ManagementRepository : IManagementRepository
         var query = @"SELECT 
                         cr.Id AS CourseId,
                         cr.Name AS CourseName,
-                    	gc.Id AS GradeCourseId,
+                        gc.Id AS GradeCourseId,
                         g.Id AS GradeId,
                         g.Name AS GradeName,
                         COUNT(DISTINCT s.Id) AS StudentCount,
@@ -34,7 +34,7 @@ public class ManagementRepository : IManagementRepository
                     JOIN Course cr 
                         ON cr.Id = gc.CourseId
                     LEFT JOIN Student s 
-                        ON s.ClassId = c.Id
+	                    ON s.GradeCourseId = gc.Id
                     GROUP BY 
                         cr.Id, cr.Name, g.Id, g.Name,gc.Id";
 
@@ -59,7 +59,7 @@ public class ManagementRepository : IManagementRepository
                     JOIN Course cr 
                         ON cr.Id = gc.CourseId
                     LEFT JOIN Student s 
-                        ON s.ClassId = c.Id
+                        ON s.GradeCourseId = c.GradeCourseId
                     GROUP BY 
                         cr.Id, cr.Name, g.Id, g.Name,gc.Id";
 

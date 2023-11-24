@@ -3,12 +3,15 @@ import { v4 as uuidv4 } from "uuid";
 import ConfirmButton from "../common/buttons/ConfirmButton";
 import DataGridSpinner from "../common/loadingUi/DataGridSpinner";
 
-const DataGrid = ({ columns = [], data = [], action=()=>{}, actionLabel="Create", loading = false }) => {
+const DataGrid = ({ columns = [], data = [], action=()=>{}, actionLabel="Create", loading = false, actions = [] }) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
       {/* Header Tools */}
       <div className="flex justify-between items-center px-4">
-        <ConfirmButton label={actionLabel} action={action}/>
+        {actions.map(action=>{
+          return <ConfirmButton label={action.actionLabel} action={action.actionFunc}/>
+        })}
+       
         <div className="pb-4 p-2 bg-white">
           <label htmlFor="table-search" className="sr-only">
             Search

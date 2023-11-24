@@ -18,7 +18,7 @@ const initialFormState = {
   englishName: "",
   surname: "",
   chineseName: "",
-  classId: 0,
+  gradeId: 0,
 };
 
 function Grades() {
@@ -136,7 +136,7 @@ function Grades() {
       <Datagrid
         columns={columns}
         data={data}
-        action={handleCreate}
+        actions={[{actionLabel:"Create Student", actionFunc:handleCreate}]}
         loading={isFetching}
       />
       ;

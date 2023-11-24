@@ -23,12 +23,12 @@ export const getClasses = async () => {
     return response.data;
   };
 
-  export const startClass = async (classId) =>{
-    let response = await axios.post(classRoutes.startClass, {classId});
+  export const startClass = async (startDetails) =>{
+    let response = await axios.post(classRoutes.startClass, startDetails);
     return response.data;
   }
 
-  export const endClass = async (classId) =>{
-    let response = await axios.post(classRoutes.endClass, {classId});
+  export const endClass = async (startDetails) =>{
+    let response = await axios.post(classRoutes.endClass, startDetails);
     return response.data;
   }

@@ -50,7 +50,8 @@ public class ClassController : ControllerBase
     [Route("/start-class")]
     public async Task<IActionResult> StartClass(StartEndClassRequest request)
     {
-        await _classRepository.StartClass(request.ClassId);
+        await _classService.StartClass(request);
+
         return Ok();
     }
 
@@ -58,7 +59,7 @@ public class ClassController : ControllerBase
     [Route("/end-class")]
     public async Task<IActionResult> EndClass(StartEndClassRequest request)
     {
-        await _classRepository.EndClass(request.ClassId);
+        await _classService.EndClass(request);
 
         return Ok();
     }

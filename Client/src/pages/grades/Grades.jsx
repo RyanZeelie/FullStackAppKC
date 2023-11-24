@@ -86,7 +86,7 @@ function Grades() {
       >
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
-      <Datagrid columns={columns} data={data} action={handleCreate} loading={isFetching} />;
+      <Datagrid columns={columns} data={data} actions={[{actionLabel:"Create Grade", actionFunc:handleCreate}]}  loading={isFetching} />;
     </>
   );
 }

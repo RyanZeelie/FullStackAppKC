@@ -2,7 +2,6 @@
 using CMApi.Factories;
 using CMApi.Models.DomainModels;
 using CMApi.Models.Responses;
-using CMApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers

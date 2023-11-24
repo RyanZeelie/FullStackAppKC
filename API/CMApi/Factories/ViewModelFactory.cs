@@ -54,7 +54,21 @@ public class ViewModelFactory : IViewModelFactory
 
             var overViewModel = new ClassOverView
             {
-                ClassDetails = new Class() { Id = studentClass.Id, Name = studentClass.Name, StartDate = studentClass.StartDate, EndDate = studentClass.EndDate },
+                ClassDetails = new Class()
+                {
+                    Id = studentClass.Id,
+                    Name = studentClass.Name,
+                    StartDate = studentClass.StartDate,
+                    EndDate = studentClass.EndDate,
+                    TotalScore = studentClass.TotalScore,
+                    LevelName = studentClass.LevelName,
+                    GradeName = studentClass.GradeName,
+                    GradeId = studentClass.GradeId,
+                    GradeCourseId = gradeCourseId,
+                    CourseName = studentClass.CourseName,
+                    SemesterNumber = studentClass.SemesterNumber,
+                    SemesterId = studentClass.SemesterId
+                },
                 Students = students
             };
 

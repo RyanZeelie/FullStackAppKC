@@ -32,5 +32,4 @@ public class ExceptionHandler
             await response.WriteAsync(result);
         }
     }
-
 }

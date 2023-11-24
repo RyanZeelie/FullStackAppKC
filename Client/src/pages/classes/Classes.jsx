@@ -122,7 +122,7 @@ function Classes() {
           />
         </FormModal>
         <DataGrid
-          action={handleCreate}
+          actions={[{actionLabel:"Create Class", actionFunc:handleCreate}]}
           columns={columns}
           data={data}
           loading={isFetching}

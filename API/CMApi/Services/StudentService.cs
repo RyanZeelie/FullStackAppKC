@@ -1,4 +1,5 @@
 ﻿using CMApi.Models.DomainModels;
+using CMApi.Models.Requests;
 using CMApi.Models.Responses;
 using CMApi.Repositories;
 
@@ -29,5 +30,21 @@ public class StudentService : IStudentService
     public Task<IEnumerable<StudentResult>> GetStudentOverView(int classId)
     {
        return _studentRepository.GetStudentOverView(classId);
+    }
+
+    public Task AddStudentToClass(AddStudentToClassRequest request)
+    {
+        var scoreCard = new Score()
+        {
+            StudentId = request.StudentId,
+            SemesterId = request.SemesterId,
+            IsTestTaken = false,
+            Recommendation = null,
+            Listening = 0,
+            Reading = 0,
+            Writing = 0
+        };
+
+        return _studentRepository.AddStudentToClass(scoreCard);
     }
 }

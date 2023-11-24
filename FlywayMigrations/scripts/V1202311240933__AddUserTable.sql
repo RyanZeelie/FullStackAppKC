@@ -1,0 +1,12 @@
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'User')
+BEGIN
+    CREATE TABLE [User] (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        FirstName VARCHAR(20) NOT NULL,
+        LastName VARCHAR(20) NOT NULL,
+        Email VARCHAR(20) NOT NULL,
+        HashedPassword VARCHAR(60),
+        CreateDate DATETIME,
+        IsActive BIT NOT NULL
+    );
+END

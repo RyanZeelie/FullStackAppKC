@@ -16,6 +16,7 @@ public class ClassOverView
 
 public class StudentResult
 {
+    public int ScoreId { get; set; }
     public int StudentId { get; set; }
     public string EnglishName { get; set; }
     public string Surname { get; set; }
@@ -23,7 +24,7 @@ public class StudentResult
     public int Listening { get; set; }
     public int Reading_Writing { get; set; }
     public bool TestTaken { get; set; }
-    public int Total { get; set; }
+    public decimal Total { get; set; }
     public string Recommendation { get; set; }
     public string Book { get; set; }
 }

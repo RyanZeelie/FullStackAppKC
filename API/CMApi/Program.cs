@@ -3,16 +3,19 @@ using CMApi.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var configuration = builder.Configuration;
 
 builder.Services.AddDataContext(configuration);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
 builder.Services.AddCors();
+
+builder.Services.AddJWT(configuration);
+builder.Services.AddAuthorization();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -30,7 +33,7 @@ app.UseCors(x =>
             .AllowAnyMethod());
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

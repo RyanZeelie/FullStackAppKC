@@ -8,6 +8,6 @@ public interface IClassRepository
     Task<IEnumerable<Class>> GetClassesByGradeCourseId(int gradeCourseId);
     Task CreateClass(Class classModel);
     Task UpdateClass(Class classModel);
-    Task StartClass(int classId);
+    Task<int> StartClass(int classId, int semesterNumber);
     Task EndClass(int classId);
 }

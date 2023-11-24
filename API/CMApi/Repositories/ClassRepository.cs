@@ -40,20 +40,32 @@ public class ClassRepository : IClassRepository
     public async Task<IEnumerable<Class>> GetClassesByGradeCourseId(int gradeCourseId)
     {
         var query = @"SELECT 
-                            c.*,
-                            g.Name AS GradeName,
-                            cr.Name AS CourseName,
-                            l.Name AS LevelName
-                        FROM Class c
-                        JOIN GradeCourse gc
-                            ON gc.Id = c.GradeCourseId
-                        JOIN Grade g 
-                            ON g.Id = gc.GradeId
-                        JOIN Course cr 
-                            ON cr.Id = gc.CourseId
-                        JOIN Level l
-                            ON l.Id = c.LevelId
-                        WHERE gc.Id = @GradeCourseId";
+	                    c.Id AS Id,
+                        c.Name AS Name,
+	                    c.LevelId AS LevelId,
+	                    sm.SemesterNumber,
+                        sm.Id AS SemesterId,
+	                    sm.StartDate,
+	                    sm.EndDate,
+	                    c.GradeCourseId AS GradeCourseId,
+                        g.Name AS GradeName,
+                        g.Id AS GradeId,
+                        cr.Name AS CourseName,
+                        l.Name AS LevelName,
+                        l.Total AS TotalScore
+                    FROM Class c
+                    LEFT JOIN Semester sm
+	                    ON sm.ClassId = c.Id
+                            AND sm.EndDate IS NULL
+                    JOIN GradeCourse gc
+                        ON gc.Id = c.GradeCourseId
+                    JOIN Grade g 
+                        ON g.Id = gc.GradeId
+                    JOIN Course cr 
+                        ON cr.Id = gc.CourseId
+                    JOIN Level l
+                        ON l.Id = c.LevelId
+                    WHERE gc.Id = @GradeCourseId";
 
         return await _dbConnection.QueryAsync<Class>(query, new { GradeCourseId = gradeCourseId },  _dbTransaction);
     }
@@ -78,25 +90,28 @@ public class ClassRepository : IClassRepository
         return _dbConnection.ExecuteAsync(query, classModel, _dbTransaction);
     }
 
-    public Task StartClass(int classId)
+    public Task<int> StartClass(int classId, int semesterNumber)
     {
         var startDate = DateTime.Now;
 
-        var query = @"UPDATE Class
-                    SET StartDate = @StartDate
-                    WHERE Id = @Id";
-
-        return _dbConnection.ExecuteAsync(query, new { StartDate = startDate, Id = classId} , _dbTransaction);
+        var query = @"INSERT INTO Semester
+                        (SemesterNumber, ClassId, StartDate)
+                    VALUES
+                        (@SemesterNumber, @ClassId, @StartDate)
+                    SELECT SCOPE_IDENTITY()";
+                    
+        return _dbConnection.QueryFirstOrDefaultAsync<int>(query, new { StartDate = startDate, SemesterNumber = semesterNumber , ClassId = classId } , _dbTransaction);
     }
 
     public Task EndClass(int classId)
     {
         var endDate = DateTime.Now;
 
-        var query = @"UPDATE Class
+        var query = @"UPDATE Semester
                     SET EndDate = @EndDate
-                    WHERE Id = @Id";
+                    WHERE ClassId = @ClassId
+                        AND EndDate is null";
 
-        return _dbConnection.ExecuteAsync(query, new { EndDate = endDate, Id = classId }, _dbTransaction);
+        return _dbConnection.ExecuteAsync(query, new { EndDate = endDate, ClassId = classId }, _dbTransaction);
     }
 }

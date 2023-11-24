@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { getGradesCourses, getLevels } from "../../../api/AdminAPI";
 import { v4 as uuidv4 } from "uuid";
 import Input from "../../../components/common/inputs/Input";
+import Checkbox from "../../../components/common/inputs/CheckBox";
 
 function AddEdit({ values, handleChange, errors }) {
   const { data: gradesCourses = [] } = useQuery(

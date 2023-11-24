@@ -91,7 +91,7 @@ function Levels() {
       >
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
-      <Datagrid columns={columns} data={data} action={handleCreate} loading={isFetching} />;
+      <Datagrid columns={columns} data={data} actions={[{actionLabel:"Create Level", actionFunc:handleCreate}]}  loading={isFetching} />;
     </>
   );
 }
