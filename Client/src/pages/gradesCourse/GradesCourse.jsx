@@ -1,34 +1,42 @@
 import React, { useEffect, useState } from "react";
 import Datagrid from "../../components/datagrid/DataGrid";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getGradesCourses, createGradeCourse, updateGradeCourse } from "../../api/AdminAPI";
+import {
+  getGradesCourses,
+  createGradeCourse,
+  updateGradeCourse,
+} from "../../api/AdminAPI";
 import FormModal from "../../components/common/modals/FormModal";
 import AddEdit from "../gradesCourse/components/AddEdit";
 import { useFormik } from "formik";
 import validation from "./validations/validation";
 import { EditIcon } from "../../components/common/icons/Icons";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import ToolTip from '../../components/common/tooltip/ToolTipWrapper'
 
 const initialFormState = {
   id: 0,
-  gradeId : 0,
-  courseId :0
+  gradeId: 0,
+  courseId: 0,
 };
 
 function GradesCourse() {
   const queryClient = useQueryClient();
-  const { data = [], isFetching } = useQuery(["gradesCourses"], getGradesCourses);
+  const { data = [], isFetching } = useQuery(
+    ["gradesCourses"],
+    getGradesCourses
+  );
   const { mutate: createGradeCourseMutation } = useMutation(createGradeCourse, {
     onSuccess: () => {
       queryClient.invalidateQueries("gradesCourses");
-      toast.success("Grade and Course Saved")
+      toast.success("Grade and Course Saved");
       handleModal();
     },
   });
   const { mutate: updateGradeCourseMutation } = useMutation(updateGradeCourse, {
     onSuccess: () => {
       queryClient.invalidateQueries("gradesCourses");
-      toast.success("Grade and Course Updated")
+      toast.success("Grade and Course Updated");
       handleModal();
     },
   });
@@ -38,13 +46,15 @@ function GradesCourse() {
     useFormik({
       initialValues: {
         id: 0,
-        gradeId : 0,
-        courseId :0
+        gradeId: 0,
+        courseId: 0,
       },
       validationSchema: validation,
       validateOnMount: true,
       onSubmit: (vals) => {
-        vals.id === 0 ? createGradeCourseMutation(vals) : updateGradeCourseMutation(vals);
+        vals.id === 0
+          ? createGradeCourseMutation(vals)
+          : updateGradeCourseMutation(vals);
       },
     });
 
@@ -66,7 +76,12 @@ function GradesCourse() {
       renderCell: (row) => {
         return (
           <>
-            <button onClick={() => handleEdit(row)}><EditIcon/>Edit</button>
+            <button onClick={() => handleEdit(row)}>
+              {" "}
+              <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
+            </button>
           </>
         );
       },
@@ -91,7 +106,15 @@ function GradesCourse() {
       >
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
-      <Datagrid columns={columns} data={data} actions={[{actionLabel:"Create GradeCourse", actionFunc:handleCreate}]}  loading={isFetching} />;
+      <Datagrid
+        columns={columns}
+        data={data}
+        actions={[
+          { actionLabel: "Create GradeCourse", actionFunc: handleCreate },
+        ]}
+        loading={isFetching}
+      />
+      ;
     </>
   );
 }

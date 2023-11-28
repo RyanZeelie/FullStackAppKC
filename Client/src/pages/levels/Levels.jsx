@@ -7,12 +7,13 @@ import AddEdit from "../levels/components/AddEdit";
 import { useFormik } from "formik";
 import validation from "./validations/validation";
 import { EditIcon } from "../../components/common/icons/Icons";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import ToolTip from "../../components/common/tooltip/ToolTipWrapper";
 
 const initialFormState = {
   id: 0,
   name: "",
-  total : 0
+  total: 0,
 };
 
 function Levels() {
@@ -21,14 +22,14 @@ function Levels() {
   const { mutate: createLevelMutation } = useMutation(createLevel, {
     onSuccess: () => {
       queryClient.invalidateQueries("levels");
-      toast.success("Level Created")
+      toast.success("Level Created");
       handleModal();
     },
   });
   const { mutate: updateLevelMutation } = useMutation(updateLevel, {
     onSuccess: () => {
       queryClient.invalidateQueries("levels");
-      toast.success("Level Updated")
+      toast.success("Level Updated");
       handleModal();
     },
   });
@@ -65,8 +66,12 @@ function Levels() {
       renderCell: (row) => {
         return (
           <>
-          
-            <button onClick={() => handleEdit(row)}><EditIcon/>Edit</button>
+            <button onClick={() => handleEdit(row)}>
+              {" "}
+              <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
+            </button>
           </>
         );
       },
@@ -91,7 +96,13 @@ function Levels() {
       >
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
-      <Datagrid columns={columns} data={data} actions={[{actionLabel:"Create Level", actionFunc:handleCreate}]}  loading={isFetching} />;
+      <Datagrid
+        columns={columns}
+        data={data}
+        actions={[{ actionLabel: "Create Level", actionFunc: handleCreate }]}
+        loading={isFetching}
+      />
+      ;
     </>
   );
 }

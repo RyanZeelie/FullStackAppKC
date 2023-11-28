@@ -20,7 +20,6 @@ public class StudentController : ControllerBase
         _studentRepository = studentRepository;
     }
 
-    [Authorize]
     [HttpGet]
     [Route("/get-students")]
     public async Task<ActionResult<Student>> GetStudents()
@@ -76,10 +75,10 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/add-student-to-class")]
+    [Route("/add-students-to-class")]
     public async Task<ActionResult<Student>> AddStudentToclass(AddStudentToClassRequest request)
     {
-        await _studentService.AddStudentToClass(request);
+        await _studentService.AddStudentsToClass(request);
 
         return Ok();
     }

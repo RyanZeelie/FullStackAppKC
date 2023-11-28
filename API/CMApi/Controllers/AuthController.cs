@@ -1,5 +1,4 @@
 ﻿using CMApi.Models.Requests;
-using CMApi.Repositories;
 using CMApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

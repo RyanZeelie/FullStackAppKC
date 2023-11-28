@@ -61,6 +61,7 @@ public static class ServiceCollectionExtension
             var key = configuration.GetSection("Jwt:Key").Value;
             var issuer = configuration.GetSection("Jwt:Issuer").Value;
             var audience = configuration.GetSection("Jwt:Audience").Value;
+
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = issuer,
@@ -70,7 +71,8 @@ public static class ServiceCollectionExtension
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero // Read more
+
             };
         });
 

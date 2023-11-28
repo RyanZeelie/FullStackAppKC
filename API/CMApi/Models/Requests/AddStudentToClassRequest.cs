@@ -3,5 +3,5 @@
 public class AddStudentToClassRequest
 { 
     public int SemesterId { get; set; }
-    public int StudentId { get; set; }
+    public List<int> StudentIds { get; set; }
 }

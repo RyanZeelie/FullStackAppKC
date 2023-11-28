@@ -7,7 +7,8 @@ import { EditIcon } from "../../components/common/icons/Icons";
 import { useFormik } from "formik";
 import validation from "../classes/validations/validation";
 import AddEdit from "./components/AddEdit";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import ToolTip from "../../components/common/tooltip/ToolTipWrapper";
 const initialFormState = {
   id: 0,
   name: "",
@@ -22,14 +23,14 @@ function Classes() {
   const { mutate: createClassMutation } = useMutation(createClass, {
     onSuccess: () => {
       queryClient.invalidateQueries("classes");
-      toast.success('Class Created')
+      toast.success("Class Created");
       handleModal();
     },
   });
   const { mutate: updateClassMutation } = useMutation(updateClass, {
     onSuccess: () => {
       queryClient.invalidateQueries("classes");
-      toast.success('Class Updated')
+      toast.success("Class Updated");
       handleModal();
     },
   });
@@ -66,8 +67,9 @@ function Classes() {
         return (
           <>
             <button onClick={() => handleEdit(row)}>
-              <EditIcon />
-              Edit
+              <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
             </button>
           </>
         );
@@ -122,7 +124,7 @@ function Classes() {
           />
         </FormModal>
         <DataGrid
-          actions={[{actionLabel:"Create Class", actionFunc:handleCreate}]}
+          actions={[{ actionLabel: "Create Class", actionFunc: handleCreate }]}
           columns={columns}
           data={data}
           loading={isFetching}

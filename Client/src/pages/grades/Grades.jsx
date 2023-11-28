@@ -7,7 +7,8 @@ import AddEdit from "../grades/components/AddEdit";
 import { useFormik } from "formik";
 import validation from "./validations/validation";
 import { EditIcon } from "../../components/common/icons/Icons";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import ToolTip from '../../components/common/tooltip/ToolTipWrapper'
 
 const initialFormState = {
   id: 0,
@@ -20,14 +21,14 @@ function Grades() {
   const { mutate: createGradeMutation } = useMutation(createGrade, {
     onSuccess: () => {
       queryClient.invalidateQueries("grades");
-      toast.success("Grade Updated")
+      toast.success("Grade Updated");
       handleModal();
     },
   });
   const { mutate: updateGradeMutation } = useMutation(updateGrade, {
     onSuccess: () => {
       queryClient.invalidateQueries("grades");
-      toast.success("Grade Updated")
+      toast.success("Grade Updated");
       handleModal();
     },
   });
@@ -64,8 +65,12 @@ function Grades() {
       renderCell: (row) => {
         return (
           <>
-          
-            <button onClick={() => handleEdit(row)}><EditIcon/>Edit</button>
+            <button onClick={() => handleEdit(row)}>
+              {" "}
+              <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
+            </button>
           </>
         );
       },
@@ -86,7 +91,13 @@ function Grades() {
       >
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
-      <Datagrid columns={columns} data={data} actions={[{actionLabel:"Create Grade", actionFunc:handleCreate}]}  loading={isFetching} />;
+      <Datagrid
+        columns={columns}
+        data={data}
+        actions={[{ actionLabel: "Create Grade", actionFunc: handleCreate }]}
+        loading={isFetching}
+      />
+      ;
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import StudentList from "./StudentList";
 import Select from "../../../components/common/inputs/Select";
-
+import GeneralNote from "../../../components/common/notifications/GeneralNote";
 function ConfirmSemester({
   students,
   values,
@@ -18,10 +18,12 @@ function ConfirmSemester({
   }, [classDetails.semesterNumber]);
 
   const getSemesterEndMessage = (semesterNum) => {
-    if (parseInt(semesterNum) != 4) {
+    if (parseInt(semesterNum) != 2) {
       return `You are about to end Semester ${semesterNum} and move to Semester ${
         semesterNum + 1
-      }. Are all the students moving on?`;
+      }. Select the students that are moving on to the next semester`;
+    } else {
+      return `You are about to end Semester ${semesterNum}`;
     }
   };
   return (
@@ -36,26 +38,34 @@ function ConfirmSemester({
         >
           <option value={1}>1</option>
           <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
         </Select>
       ) : (
         <>
-          <div className="bg-orange-400 p-4 rounded-md text-white mb-5">
-            <p className="text-md mb-2">{getSemesterEndMessage(classDetails.semesterNumber)}</p>
-          </div>
-          <p className="text-lg p-2">{`Select a date for the start of Semester ${parseInt(classDetails.semesterNumber) + 1} :`}</p>
-          <input className="text-lg p-2" type="date" />
+          {classDetails.semesterNumber != 2 && (
+            <GeneralNote
+              level={"info"}
+              message={`Select a date for the start of Semester ${
+                parseInt(classDetails.semesterNumber) + 1
+              }`}
+            />
+          )}
+
+          <input className="text-lg " type="date" />
+          <GeneralNote
+            level={"warning"}
+            message={getSemesterEndMessage(classDetails.semesterNumber)}
+          />
         </>
       )}
-      <p>Select students that are moving to the next semester</p>
-      <StudentList
-        setFieldValue={setFieldValue}
-        gradeCourseId={classDetails.gradeCourseId}
-        students={students}
-        studentIds={values.studentIds}
-        semesterId={classDetails.semesterId}
-      />
+      {classDetails.semesterNumber != 2 && (
+        <StudentList
+          setFieldValue={setFieldValue}
+          gradeCourseId={classDetails.gradeCourseId}
+          students={students}
+          studentIds={values.studentIds}
+          semesterId={classDetails.semesterId}
+        />
+      )}
     </>
   );
 }

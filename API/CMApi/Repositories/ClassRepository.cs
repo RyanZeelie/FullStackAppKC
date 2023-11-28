@@ -20,19 +20,27 @@ public class ClassRepository : IClassRepository
     public async Task<IEnumerable<Class>> GetClasses()
     {
         var query = @"SELECT 
-                            c.*,
-                            g.Name AS GradeName,
-                            cr.Name AS CourseName,
-                            l.Name AS LevelName
-                        FROM Class c
-                        JOIN GradeCourse gc
-                            ON gc.Id = c.GradeCourseId
-                        JOIN Grade g 
-                            ON g.Id = gc.GradeId
-                        JOIN Course cr 
-                            ON cr.Id = gc.CourseId
-                        JOIN Level l
-                            ON l.Id = c.LevelId";
+	                    c.Id,
+	                    c.Name,
+	                    c.GradeCourseId,
+	                    c.LevelId,
+	                    g.Name AS GradeName,
+	                    cr.Name AS CourseName,
+	                    l.Name AS LevelName,
+	                    s.StartDate,
+	                    s.EndDate
+                    FROM Class c
+                    JOIN GradeCourse gc
+                        ON gc.Id = c.GradeCourseId
+                    JOIN Grade g 
+                        ON g.Id = gc.GradeId
+                    JOIN Course cr 
+                        ON cr.Id = gc.CourseId
+                    JOIN Level l
+                        ON l.Id = c.LevelId
+                    LEFT JOIN Semester s 
+	                    ON s.ClassId = c.Id
+		                    AND s.EndDate IS NULL";
 
         return await _dbConnection.QueryAsync<Class>(query, _dbTransaction);
     }

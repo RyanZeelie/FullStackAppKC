@@ -10,5 +10,5 @@ public interface IStudentService
     Task CreateStudent(Student student);
     Task UpdateStudent(Student student);
     Task<IEnumerable<StudentResult>> GetStudentOverView(int classId);
-    Task AddStudentToClass(AddStudentToClassRequest request);
+    Task AddStudentsToClass(AddStudentToClassRequest request);
 }

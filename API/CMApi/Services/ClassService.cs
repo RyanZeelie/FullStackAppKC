@@ -76,8 +76,8 @@ public class ClassService : IClassService
     {
         await _classRepository.EndClass(classModel.ClassId);
 
-        // If its not the 4th semester, restart the class with a new semester number
-        if (classModel.SemesterNumber != 4)
+        // If its not the 2th semester, restart the class with a new semester number
+        if (classModel.SemesterNumber != 2 && classModel.StudentIds.Count > 0)
         {
             classModel.SemesterNumber++;
             await StartClass(classModel);

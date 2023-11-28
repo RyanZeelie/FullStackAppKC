@@ -18,7 +18,7 @@ console.log(externalExpandedState)
   const currentExpandedState = externalExpandedState !== null ? externalExpandedState : isExpanded;
 
   return (
-    <div className=" rounded-lg overflow-hidden shadow-lg m-4 bg-white ">
+    <div className=" rounded-lg overflow-hidden shadow-lg m-4 bg-white border border-gray-300 ">
       <div className="border-b p-4">
         <button
           onClick={() =>

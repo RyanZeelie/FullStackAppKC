@@ -32,19 +32,22 @@ public class StudentService : IStudentService
        return _studentRepository.GetStudentOverView(classId);
     }
 
-    public Task AddStudentToClass(AddStudentToClassRequest request)
+    public async Task AddStudentsToClass(AddStudentToClassRequest request)
     {
-        var scoreCard = new Score()
+        foreach (var studentId in request.StudentIds)
         {
-            StudentId = request.StudentId,
-            SemesterId = request.SemesterId,
-            IsTestTaken = false,
-            Recommendation = null,
-            Listening = 0,
-            Reading = 0,
-            Writing = 0
-        };
+            var scoreCard = new Score()
+            {
+                StudentId = studentId,
+                SemesterId = request.SemesterId,
+                IsTestTaken = false,
+                Recommendation = null,
+                Listening = 0,
+                Reading = 0,
+                Writing = 0
+            };
 
-        return _studentRepository.AddStudentToClass(scoreCard);
+            await _studentRepository.AddStudentToClass(scoreCard);
+        }
     }
 }

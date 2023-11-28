@@ -6,11 +6,17 @@ import { getClassOverview } from "../../api/managementAPI";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { endClass, startClass } from "../../api/classesAPI";
-import { dropStudentFromClass,getStudentsByGrade } from "../../api/studentAPI";
+import {
+  dropStudentFromClass,
+  getStudentsByGrade,
+  addStudentsToClass,
+} from "../../api/studentAPI";
 import FormModal from "../../components/common/modals/FormModal";
 import { useFormik } from "formik";
 import ConfirmSemester from "./components/ConfirmSemester";
 import StudentListAdd from "./components/StudentListAdd";
+import { DeleteIcon } from "../../components/common/icons/Icons";
+import Tooltip from "../../components/common/tooltip/ToolTipWrapper";
 
 export default function Overview() {
   const [accordianStates, setAccordianState] = useState({});
@@ -28,6 +34,11 @@ export default function Overview() {
     },
   });
   const { mutate: dropStudent } = useMutation(dropStudentFromClass, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("classOverview");
+    },
+  });
+  const { mutate: addStudent } = useMutation(addStudentsToClass, {
     onSuccess: () => {
       queryClient.invalidateQueries("classOverview");
     },
@@ -62,7 +73,14 @@ export default function Overview() {
 
     setAddStudentModal(!addStudentModal);
   };
-  
+  const handleAddStudentsToClass = (semesterId) => {
+    addStudent({
+      semesterId: semesterId,
+      studentIds: listOfStudentsToAdd,
+    });
+    handleAddStudentModal();
+    setListOfstudentsToAdd([]);
+  };
   const handleAccordion = (classId) => {
     console.log(accordianStates);
     setAccordianState((prevState) => ({
@@ -108,7 +126,9 @@ export default function Overview() {
       renderCell: (row) => {
         return (
           <button onClick={() => dropStudent(row.scoreId)}>
-            Remove Student
+            <Tooltip text={"Remove Student"}>
+              <DeleteIcon />
+            </Tooltip>
           </button>
         );
       },
@@ -188,14 +208,20 @@ export default function Overview() {
         />
       </FormModal>
       <FormModal
-      isOpen={addStudentModal}
-      handleModal={handleAddStudentModal}
-      modalTitle={`"Add Students"`}
-      submit={()=>{}}
-      disabled={listOfStudentsToAdd.length === 0}
+        isOpen={addStudentModal}
+        handleModal={handleAddStudentModal}
+        modalTitle={`Add Students to current Class`}
+        submit={() => {
+          handleAddStudentsToClass(selectedClass.semesterId);
+        }}
+        disabled={listOfStudentsToAdd.length === 0}
       >
-          <StudentListAdd studentIds={listOfStudentsToAdd} setStudentIds ={setListOfstudentsToAdd} gradeCourseId={selectedClass.gradeCourseId}/>
-          </FormModal>
+        <StudentListAdd
+          studentIds={listOfStudentsToAdd}
+          setStudentIds={setListOfstudentsToAdd}
+          gradeCourseId={selectedClass.gradeCourseId}
+        />
+      </FormModal>
       {data?.classes?.map(({ classDetails, students }) => {
         return (
           <>
@@ -205,7 +231,7 @@ export default function Overview() {
               toggleAccordion={() => handleAccordion(classDetails.id)}
               state={accordianStates[classDetails.id]}
             >
-              <div className="bg-blue-400 p-4 rounded-md text-white mb-5">
+              <div className="bg-blue-400 p-4 rounded-md text-white mb-5 border border-gray-400">
                 <p className="text-lg mb-2">Class Information</p>
                 <p>
                   Status :{" "}
@@ -223,21 +249,30 @@ export default function Overview() {
                 data={students}
                 actions={[
                   {
+                    disabled:false,
                     actionLabel: classDetails.startDate
                       ? "End Semester"
                       : "Start Semester",
-                    actionFunc: ()=>handleModal({
-                      classDetails: classDetails,
-                      students: students,
-                      type: classDetails.startDate ? "EndClass" : "StartClass",
-                    }),
+                    actionFunc: () =>
+                      handleModal({
+                        classDetails: classDetails,
+                        students: students,
+                        type: classDetails.startDate
+                          ? "EndClass"
+                          : "StartClass",
+                      }),
                   },
-                  {actionLabel:"Add Student", actionFunc:()=>handleAddStudentModal({
-                    gradeCourseId : classDetails.gradeCourseId,
-                    semesterId : 0,
-                    students: students,
-                    type: "AddStudent",
-                  })}
+                  {
+                    actionLabel: "Add Student",
+                    disabled: classDetails.startDate === null,
+                    actionFunc: () =>
+                      handleAddStudentModal({
+                        gradeCourseId: classDetails.gradeCourseId,
+                        semesterId: classDetails.semesterId,
+                        students: students,
+                        type: "AddStudent",
+                      }),
+                  },
                 ]}
               />
             </Accordion>

@@ -12,7 +12,8 @@ import {
 import validation from "./validations/validation";
 import { EditIcon } from "../../components/common/icons/Icons";
 import { toast } from "react-toastify";
-
+import ToolTip from '../../components/common/tooltip/ToolTipWrapper'
+import TableChip from '../../components/common/chips/TableChip'
 const initialFormState = {
   id: 0,
   englishName: "",
@@ -84,8 +85,9 @@ function Grades() {
         return (
           <>
             <button onClick={() => handleEdit(row)}>
-              <EditIcon />
-              Edit
+            <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
             </button>
           </>
         );
@@ -106,6 +108,9 @@ function Grades() {
     {
       header: "Class",
       dataIdentifier: "className",
+      renderCell:({className})=>{
+        return className === "Unnasigned" ? <TableChip text={"Unnasigned"} bgColor={"red"}/> : className
+      }
     },
     {
       header: "Grade",

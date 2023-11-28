@@ -7,7 +7,9 @@ import { useFormik } from "formik";
 import AddEdit from "./components/AddEdit";
 import { EditIcon } from "../../components/common/icons/Icons";
 import validation from "./validations/validation";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import ToolTip from "../../components/common/tooltip/ToolTipWrapper";
+
 const initialFormState = {
   id: 0,
   name: "",
@@ -20,14 +22,14 @@ function Courses() {
   const { mutate: createCourseMutation } = useMutation(createCourse, {
     onSuccess: () => {
       queryClient.invalidateQueries("courses");
-      toast.success('Course Created')
+      toast.success("Course Created");
       handleModal();
     },
   });
   const { mutate: updateCourseMutation } = useMutation(updateCourse, {
     onSuccess: () => {
       queryClient.invalidateQueries("courses");
-      toast.success('Course Updated')
+      toast.success("Course Updated");
       handleModal();
     },
   });
@@ -62,8 +64,9 @@ function Courses() {
         return (
           <>
             <button onClick={() => handleEdit(row)}>
-              <EditIcon />
-              Edit
+              <ToolTip text={"Edit"}>
+                <EditIcon />
+              </ToolTip>
             </button>
           </>
         );

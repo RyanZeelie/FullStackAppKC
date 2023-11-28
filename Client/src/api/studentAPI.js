@@ -9,7 +9,7 @@ const studentRoutes = {
   getStudentsByGrade : `${baseURL}/get-unassigned-students-by-grade`,
   getCurrentSemesterStudents : `${baseURL}/get-students-for-current-semester`,
   dropStudentFromClass : `${baseURL}/drop-student-from-class`,
-  addStudentToClass : `${baseURL}/add-student-to-class`
+  addStudentsToClass : `${baseURL}/add-students-to-class`
  
 };
 
@@ -39,8 +39,8 @@ export const getStudents = async () => {
     let response = await axios.put(`${studentRoutes.dropStudentFromClass}/${scoreCardId}`);
     return response.data;
   };
-  export const addStudentToClass = async (addStudentRequest) => {
-    let response = await axios.put(`${studentRoutes.addStudentToClass}`, addStudentRequest);
+  export const addStudentsToClass = async (addStudentRequest) => {
+    let response = await axios.post(`${studentRoutes.addStudentsToClass}`, addStudentRequest);
     return response.data;
   };
   
