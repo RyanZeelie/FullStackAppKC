@@ -10,19 +10,29 @@ import {
   dropStudentFromClass,
   getStudentsByGrade,
   addStudentsToClass,
+  updateScoreCard,
 } from "../../api/studentAPI";
 import FormModal from "../../components/common/modals/FormModal";
 import { useFormik } from "formik";
 import ConfirmSemester from "./components/ConfirmSemester";
 import StudentListAdd from "./components/StudentListAdd";
-import { DeleteIcon } from "../../components/common/icons/Icons";
+import {
+  DeleteIcon,
+  EditIcon,
+  SaveIcon,
+} from "../../components/common/icons/Icons";
 import Tooltip from "../../components/common/tooltip/ToolTipWrapper";
+import Input from "../../components/common/inputs/Input";
+import TableInput from "../../components/common/inputs/TableInput";
+import Select from "../../components/common/inputs/Select";
 
 export default function Overview() {
   const [accordianStates, setAccordianState] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [addStudentModal, setAddStudentModal] = useState(false);
   const [listOfStudentsToAdd, setListOfstudentsToAdd] = useState([]);
+  const [isEdit, setIsEdit] = useState(null);
+
   const { mutate: startClassMutation } = useMutation(startClass, {
     onSuccess: () => {
       queryClient.invalidateQueries("classOverview");
@@ -43,7 +53,11 @@ export default function Overview() {
       queryClient.invalidateQueries("classOverview");
     },
   });
-
+  const { mutate: updateScore } = useMutation(updateScoreCard, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("classOverview");
+    },
+  });
   const [selectedClass, setSelectedClass] = useState({
     classDetails: {},
     students: [],
@@ -120,16 +134,65 @@ export default function Overview() {
     getClassOverview
   );
 
+  const handleEditRow = (row) => {
+    setIsEdit(row);
+  };
+  const handleRowValueEdit = ({target}) => {
+    let {name,value} = target
+    setIsEdit(prev=>(
+      {
+        ...prev,
+        [name] : value
+      }
+    ))
+  }
+  const handleSaveRow = () => {
+    let {
+      scoreId,
+      listening,
+      reading_Writing,
+      isTestTaken,
+      recommendation,
+      book,
+    } = isEdit
+    updateScore({
+      scoreId,
+      listening,
+      reading_Writing,
+      isTestTaken : isTestTaken === "true" || isTestTaken === true ,
+      recommendation,
+      book,
+    });
+    setIsEdit(null);
+  };
   const columns = [
     {
       header: "Actions",
       renderCell: (row) => {
         return (
-          <button onClick={() => dropStudent(row.scoreId)}>
-            <Tooltip text={"Remove Student"}>
-              <DeleteIcon />
-            </Tooltip>
-          </button>
+          <div>
+            {" "}
+            <button className="mr-4" onClick={() => dropStudent(row.scoreId)}>
+              <Tooltip text={"Remove Student"}>
+                <DeleteIcon />
+              </Tooltip>
+            </button>
+            {isEdit?.scoreId === row.scoreId ? (
+              <button onClick={() => handleSaveRow(row)}>
+                {" "}
+                <Tooltip text={"Save"}>
+                  <SaveIcon />
+                </Tooltip>
+              </button>
+            ) : (
+              <button onClick={() => handleEditRow(row)}>
+                {" "}
+                <Tooltip text={"Edit"}>
+                  <EditIcon />
+                </Tooltip>
+              </button>
+            )}
+          </div>
         );
       },
     },
@@ -143,11 +206,21 @@ export default function Overview() {
     },
     {
       header: "Listening",
-      dataIdentifier: "listening",
+      renderCell: (row) => {
+        if (isEdit?.scoreId === row.scoreId) {
+          return <TableInput name="listening" value={isEdit?.listening} type="number" onChange={handleRowValueEdit} />;
+        }
+        return row.listening;
+      },
     },
     {
       header: "Reading/Writing",
-      dataIdentifier: "reading_Writing",
+      renderCell: (row) => {
+        if (isEdit?.scoreId === row.scoreId) {
+          return <TableInput name="reading_Writing" value={isEdit?.reading_Writing} type="number" onChange={handleRowValueEdit} />;
+        }
+        return row.reading_Writing;
+      },
     },
     {
       header: "Total",
@@ -159,8 +232,11 @@ export default function Overview() {
     {
       header: "Test Taken",
       renderCell: (row) => {
-        return row.testTaken ? "Yea" : "Nah";
-      },
+        if (isEdit?.scoreId === row.scoreId) {
+          return <Select name="isTestTaken" value={isEdit?.isTestTaken}  handleChange={handleRowValueEdit} ><option value={true}>Yes</option><option value={false}>No</option></Select>;
+        }
+        return row.isTestTaken ? "Yes" : "No";
+      }
     },
     {
       header: "Recommnedation",
@@ -249,7 +325,7 @@ export default function Overview() {
                 data={students}
                 actions={[
                   {
-                    disabled:false,
+                    disabled: false,
                     actionLabel: classDetails.startDate
                       ? "End Semester"
                       : "Start Semester",

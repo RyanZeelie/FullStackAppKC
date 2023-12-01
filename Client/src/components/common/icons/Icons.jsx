@@ -121,7 +121,7 @@ export const EditIcon = () => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
-      stroke="currentColor"
+      stroke="#60A5FA"
       className="w-6 h-6"
     >
       <path
@@ -174,6 +174,12 @@ export const DeleteIcon = () =>{
  return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="w-6 h-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
 </svg>
+}
+export const SaveIcon = () =>{
+  return  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+</svg>
+
 
 }
 export default {
@@ -186,5 +192,6 @@ export default {
   EditIcon,
   InfoIcon,
   WarningIcon,
-  DeleteIcon
+  DeleteIcon,
+  SaveIcon
 };

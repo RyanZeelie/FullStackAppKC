@@ -23,8 +23,9 @@ public class StudentResult
     public string ChineseName { get; set; }
     public int Listening { get; set; }
     public int Reading_Writing { get; set; }
-    public bool TestTaken { get; set; }
+    public bool IsTestTaken { get; set; }
     public decimal Total { get; set; }
     public string Recommendation { get; set; }
     public string Book { get; set; }
+    public bool IsLocked { get; set; }
 }

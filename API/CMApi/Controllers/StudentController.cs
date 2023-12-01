@@ -83,4 +83,13 @@ public class StudentController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPut]
+    [Route("/update-score-card")]
+    public async Task<ActionResult<Student>> UpdateScoreCard(UpdateScoreCardRequest request)
+    {
+        await _studentRepository.UpdateScoreCard(request);
+
+        return Ok();
+    }
 }

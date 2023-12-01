@@ -36,18 +36,27 @@ public class StudentService : IStudentService
     {
         foreach (var studentId in request.StudentIds)
         {
-            var scoreCard = new Score()
-            {
-                StudentId = studentId,
-                SemesterId = request.SemesterId,
-                IsTestTaken = false,
-                Recommendation = null,
-                Listening = 0,
-                Reading = 0,
-                Writing = 0
-            };
+            var existingScoreCard = await _studentRepository.GetExistingScoreCardForStudent(request.SemesterId, studentId);
 
-            await _studentRepository.AddStudentToClass(scoreCard);
+            if(existingScoreCard is null) 
+            {
+                var scoreCard = new Score()
+                {
+                    StudentId = studentId,
+                    SemesterId = request.SemesterId,
+                    IsTestTaken = false,
+                    Recommendation = null,
+                    Listening = 0,
+                    Reading = 0,
+                    Writing = 0
+                };
+
+                await _studentRepository.AddStudentToClass(scoreCard);
+            }
+            else
+            {
+                await _studentRepository.ReActivateScoreCard(existingScoreCard.Id);
+            }
         }
     }
 }

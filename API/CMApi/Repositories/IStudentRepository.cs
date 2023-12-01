@@ -1,4 +1,5 @@
 ﻿using CMApi.Models.DomainModels;
+using CMApi.Models.Requests;
 using CMApi.Models.Responses;
 
 namespace CMApi.Repositories;
@@ -14,4 +15,7 @@ public interface IStudentRepository
     Task StartClass(int semesterId, List<Score> scoreCards);
     Task DropStudentFromClass(int scoreCardId);
     Task AddStudentToClass(Score scoreCard);
+    Task<Score?> GetExistingScoreCardForStudent(int semesterId, int studentId);
+    Task ReActivateScoreCard(int scoreCardId);
+    Task UpdateScoreCard(UpdateScoreCardRequest request);
 }

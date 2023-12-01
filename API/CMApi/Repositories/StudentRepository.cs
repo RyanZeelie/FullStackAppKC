@@ -3,6 +3,7 @@ using System.Data;
 using CMApi.Models.DomainModels;
 using Dapper;
 using CMApi.Models.Responses;
+using CMApi.Models.Requests;
 
 namespace CMApi.Repositories;
 
@@ -117,8 +118,9 @@ public class StudentRepository : IStudentRepository
 	                    s.ChineseName,
 	                    sc.Listening AS Listening,
 	                    sc.Reading AS Reading_Writing,
-	                    sc.IsTestTaken AS TestTaken,
+	                    sc.IsTestTaken,
 	                    CAST(((sc.Listening + sc.Reading + sc.Writing)/ l.Total) *100 AS DECIMAL(10, 2)) AS Total,
+                        sc.IsLocked,
 	                    sc.Recommendation AS Recommendation
 	                    --'BookTODO' AS Book
 	                    FROM 
@@ -166,5 +168,41 @@ public class StudentRepository : IStudentRepository
                         (@StudentId, @SemesterId, @IsTestTaken, @Recommendation, @Listening, @Reading, @Writing, 1)";
 
         return _dbConnection.ExecuteAsync(query, scoreCard, _dbTransaction);
+    }
+
+    public async Task<Score?> GetExistingScoreCardForStudent(int semesterId, int studentId)
+    {
+        var query = @"SELECT 
+                        *
+                    FROM SCORE
+                    WHERE SemesterId = @SemesterId
+                        AND StudentId = @StudentId";
+
+        return await _dbConnection.QueryFirstOrDefaultAsync<Score>(query, new { SemesterId = semesterId, StudentId = studentId }, _dbTransaction);
+    }
+
+    public Task ReActivateScoreCard(int scoreCardId)
+    {
+        var query = @"UPDATE
+                        Score
+                    SET 
+                        IsActive = 1        
+                    WHERE Id = @ScoreCardId";
+
+        return _dbConnection.ExecuteAsync(query, new { ScoreCardId = scoreCardId}, _dbTransaction);
+    }
+
+    public Task UpdateScoreCard(UpdateScoreCardRequest request)
+    {
+        var query = @"UPDATE
+                        Score
+                    SET 
+                        Listening = @Listening,
+                        Reading = @Reading_Writing,
+                        Writing = @Reading_writing,
+                        IsTestTaken = @IsTestTaken
+                    WHERE Id = @ScoreId";
+
+        return _dbConnection.ExecuteAsync(query, request, _dbTransaction);
     }
 }
