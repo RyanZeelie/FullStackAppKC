@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "./AxiosClient";
 
 const routes = {
   getAllGrades: "./mockdata/mock-grades.json",
@@ -7,14 +7,14 @@ const routes = {
 };
 
 export const getGrades = async () => {
-  let response = await axios.get(routes.getAllGrades);
+  let response = await axiosClient.get(routes.getAllGrades);
   return response.data;
 };
 export const getClasses = async () => {
-    let response = await axios.get(routes.getAllClasses);
+    let response = await axiosClient.get(routes.getAllClasses);
     return response.data;
   };
   export const getStudents= async () => {
-    let response = await axios.get(routes.getAllStudents);
+    let response = await axiosClient.get(routes.getAllStudents);
     return response.data;
   };

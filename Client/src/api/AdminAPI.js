@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "./AxiosClient";
 
 // TODO : Create a default Axios Client
 const baseURL = "https://localhost:7232";
@@ -22,52 +22,52 @@ const udpateRoutes = {
 };
 
 export const getGrades = async () => {
-  let response = await axios.get(getRoutes.getAllGrades);
+  let response = await axiosClient.get(getRoutes.getAllGrades);
   return response.data;
 };
 export const getCourses = async () => {
-  let response = await axios.get(getRoutes.getAllCourses);
+  let response = await axiosClient.get(getRoutes.getAllCourses);
   return response.data;
 };
 export const getLevels = async () => {
-  let response = await axios.get(getRoutes.getAllLevels);
+  let response = await axiosClient.get(getRoutes.getAllLevels);
   return response.data;
 };
 export const getGradesCourses = async () => {
-  let response = await axios.get(getRoutes.getAllGradesCourses);
+  let response = await axiosClient.get(getRoutes.getAllGradesCourses);
   return response.data;
 };
 
 export const createGrade = async (grade) => {
-  let response = await axios.post(createRoutes.createGrade, grade);
+  let response = await axiosClient.post(createRoutes.createGrade, grade);
   return response.data;
 };
 export const createCourse = async (course) => {
-  let response = await axios.post(createRoutes.createCourse, course);
+  let response = await axiosClient.post(createRoutes.createCourse, course);
   return response.data;
 };
 export const createLevel = async (level) => {
-  let response = await axios.post(createRoutes.createLevel, level);
+  let response = await axiosClient.post(createRoutes.createLevel, level);
   return response.data;
 };
 export const createGradeCourse = async (gradeCourse) => {
-  let response = await axios.post(createRoutes.createGradeCourse, gradeCourse);
+  let response = await axiosClient.post(createRoutes.createGradeCourse, gradeCourse);
   return response.data;
 };
 
 export const updateGrade = async (grade) => {
-    let response = await axios.put(udpateRoutes.updateGrade,grade);
+    let response = await axiosClient.put(udpateRoutes.updateGrade,grade);
     return response.data;
   };
   export const updateCourse = async (course) => {
-    let response = await axios.put(udpateRoutes.updateCourse, course);
+    let response = await axiosClient.put(udpateRoutes.updateCourse, course);
     return response.data;
   };
   export const updateLevel = async (level) => {
-    let response = await axios.put(udpateRoutes.updateLevel, level);
+    let response = await axiosClient.put(udpateRoutes.updateLevel, level);
     return response.data;
   };
   export const updateGradeCourse = async (gradeCourse) => {
-    let response = await axios.put(udpateRoutes.updateGradeCourse, gradeCourse);
+    let response = await axiosClient.put(udpateRoutes.updateGradeCourse, gradeCourse);
     return response.data;
   };

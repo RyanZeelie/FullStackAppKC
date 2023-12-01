@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "./AxiosClient";
 
 // TODO : Create a default Axios Client
 const baseURL = "https://localhost:7232";
@@ -11,24 +11,24 @@ const classRoutes = {
 };
 
 export const getClasses = async () => {
-    let response = await axios.get(classRoutes.getAllClasses);
+    let response = await axiosClient.get(classRoutes.getAllClasses);
     return response.data;
   };
   export const createClass = async (classModel) => {
-    let response = await axios.post(classRoutes.createClass, classModel);
+    let response = await axiosClient.post(classRoutes.createClass, classModel);
     return response.data;
   };
   export const updateClass = async (classModel) => {
-    let response = await axios.put(classRoutes.updateClass, classModel);
+    let response = await axiosClient.put(classRoutes.updateClass, classModel);
     return response.data;
   };
 
   export const startClass = async (startDetails) =>{
-    let response = await axios.post(classRoutes.startClass, startDetails);
+    let response = await axiosClient.post(classRoutes.startClass, startDetails);
     return response.data;
   }
 
   export const endClass = async (startDetails) =>{
-    let response = await axios.post(classRoutes.endClass, startDetails);
+    let response = await axiosClient.post(classRoutes.endClass, startDetails);
     return response.data;
   }

@@ -9,7 +9,7 @@ const levelData = {
         icon : <InfoIcon/>
     },
     warning : {
-        color : "orange",
+        color : "red",
         icon : <WarningIcon/>
     }
 }

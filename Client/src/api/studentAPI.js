@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "./AxiosClient";
 
 // TODO : Create a default Axios Client
 const baseURL = "https://localhost:7232";
@@ -14,33 +14,33 @@ const studentRoutes = {
 };
 
 export const getStudents = async () => {
-    let response = await axios.get(studentRoutes.getAllStudents);
+    let response = await axiosClient.get(studentRoutes.getAllStudents);
     return response.data;
   };
   export const getStudentsByGrade = async ({queryKey}) => {
     let {gradeCourseId} = queryKey[1]
-    let response = await axios.get(`${studentRoutes.getStudentsByGrade}/${gradeCourseId}`);
+    let response = await axiosClient.get(`${studentRoutes.getStudentsByGrade}/${gradeCourseId}`);
     return response.data;
   };
   export const getCurrentSemesterStudents = async ({queryKey}) => {
     let {semesterId} = queryKey[1]
-    let response = await axios.get(`${studentRoutes.getCurrentSemesterStudents}/${semesterId}`);
+    let response = await axiosClient.get(`${studentRoutes.getCurrentSemesterStudents}/${semesterId}`);
     return response.data;
   };
   export const createStudent = async (student) => {
-    let response = await axios.post(studentRoutes.createStudent, student);
+    let response = await axiosClient.post(studentRoutes.createStudent, student);
     return response.data;
   };
   export const updateStudent = async (classModel) => {
-    let response = await axios.put(studentRoutes.updateStudent, classModel);
+    let response = await axiosClient.put(studentRoutes.updateStudent, classModel);
     return response.data;
   };
   export const dropStudentFromClass = async (scoreCardId) => {
-    let response = await axios.put(`${studentRoutes.dropStudentFromClass}/${scoreCardId}`);
+    let response = await axiosClient.put(`${studentRoutes.dropStudentFromClass}/${scoreCardId}`);
     return response.data;
   };
   export const addStudentsToClass = async (addStudentRequest) => {
-    let response = await axios.post(`${studentRoutes.addStudentsToClass}`, addStudentRequest);
+    let response = await axiosClient.post(`${studentRoutes.addStudentsToClass}`, addStudentRequest);
     return response.data;
   };
   

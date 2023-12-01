@@ -8,6 +8,7 @@ function Input({
   value = "",
   onChange = () => {},
   error = "",
+  type="text"
 }) {
   return (
     <div className="mb-4">
@@ -24,7 +25,7 @@ function Input({
         } p-2 rounded-md focus:outline-none focus:ring-2 ${
           error === "" ? "focus:ring-blue-600" : "focus:ring-red-600"
         } focus:border-transparent w-full`}
-        type="text"
+        type={type}
         name={name}
         value={value}
         placeholder={placeholder}

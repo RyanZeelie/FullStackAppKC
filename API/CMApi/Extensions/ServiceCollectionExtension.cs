@@ -1,11 +1,8 @@
-﻿using System.Text;
-using CMApi.Data;
+﻿using CMApi.Data;
 using CMApi.Factories;
 using CMApi.Repositories;
 using CMApi.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CMApi.Extensions;
 
@@ -19,6 +16,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IDataContext, DataContext>(provider =>
         {
             var sqlConnection = provider.GetRequiredService<SqlConnection>();
+
             return new DataContext(sqlConnection);
         });
 
@@ -49,32 +47,12 @@ public static class ServiceCollectionExtension
         return services;
     }
 
-    public static IServiceCollection AddJWT(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(o =>
-        {
-            var key = configuration.GetSection("Jwt:Key").Value;
-            var issuer = configuration.GetSection("Jwt:Issuer").Value;
-            var audience = configuration.GetSection("Jwt:Audience").Value;
+        var redisServer = configuration.GetSection("Redis:Server").Value;
+        var defaultExpiry = int.Parse(configuration.GetSection("Redis:ExpiryInMintues").Value);
 
-            o.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidIssuer = issuer,
-                ValidAudience = audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ClockSkew = TimeSpan.Zero // Read more
-
-            };
-        });
+        services.AddSingleton<ICachingService, CachingService>(x => new CachingService(redisServer, TimeSpan.FromMinutes(defaultExpiry)));
 
         return services;
     }

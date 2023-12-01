@@ -1,8 +1,7 @@
-﻿namespace CMApi.Enums
+﻿namespace CMApi.Enums;
+
+public enum ViewModelsEnum
 {
-    public enum ViewModelsEnum
-    {
-        Dashboard = 0,
-        Overview = 1
-    }
+    Dashboard = 0,
+    Overview = 1
 }

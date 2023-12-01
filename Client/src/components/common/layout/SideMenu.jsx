@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import {Menu,AdminMenu} from "../../../constants/Menu";
 import CancelButton from "../buttons/CancelButton";
 import { Link } from "react-router-dom";
+import useAuthStore from "../../../stores/AuthStore";
 const SideMenu = ({ openDrawer = true }) => {
+  const {logout} = useAuthStore(state=>state)
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleCollapse = () => {
@@ -21,7 +23,7 @@ const SideMenu = ({ openDrawer = true }) => {
   return (
     <div className={containerStyle}>
       <div className={userInfoStyles.userInfoContainer}>
-        <CancelButton label="Logout" /> 
+        <CancelButton label="Logout" action={logout} /> 
       </div>
       <hr />
       <div className="flex items-center justify-between p-2">

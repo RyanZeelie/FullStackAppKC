@@ -2,6 +2,7 @@
 {
     public class LoginResponse
     {
-        public string Access_Token { get; set; }
+        public string FirstName { get; set; }
+        public List<string> Roles { get; set; }
     }
 }
