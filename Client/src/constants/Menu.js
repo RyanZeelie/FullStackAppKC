@@ -18,6 +18,7 @@ const AdminMenu = [
   },
   { label: "Levels", icon: ClassesIcon, route: "/levels" },
   { label: "Course Setup", icon: StudentsIcon, route: "/gradeCourse" },
+  { label: "Users", icon: StudentsIcon, route: "/users" },
 ];
 
 const Menu = [

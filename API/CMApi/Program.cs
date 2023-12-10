@@ -68,7 +68,7 @@ app.MapControllers();
 
 app.Run();
 
- static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
+static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
 {
     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
     return Task.CompletedTask;

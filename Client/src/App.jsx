@@ -11,6 +11,7 @@ import Courses from "./pages/courses/Courses";
 import Levels from "./pages/levels/Levels";
 import GradesCourse from "./pages/gradesCourse/GradesCourse";
 import Login from "./pages/login/Login";
+import Users from "./pages/users/Users";
 import useAuthStore from "./stores/AuthStore";
 import NotificationDialogue from "./components/common/modals/NotificationDialogue";
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/users" element={<Users />} />
             <Route path="/grades" element={<Grades />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/levels" element={<Levels />} />

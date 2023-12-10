@@ -19,14 +19,15 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetUsers()
     {
         var query = @"SELECT
-                            FirstName,
-                            LastName,
-                            Email,
-                            CreateDate,
-                            IsActive
-                        FROM [User]";
+                        Id,
+                        FirstName,
+                        LastName,
+                        Email,
+                        CreateDate,
+                        IsActive
+                    FROM [User]";
 
-        var users = await _dbConnection.QueryAsync<User>(query , _dbTransaction);
+        var users = await _dbConnection.QueryAsync<User>(query, _dbTransaction);
 
         return users.ToList();
     }
@@ -36,7 +37,7 @@ public class UserRepository : IUserRepository
         var query = @"INSERT INTO [User] (FirstName, LastName, Email, HashedPassword, CreateDate, IsActive)
                          VALUES (@FirstName, @LastName, @Email, @HashedPassword, @CreateDate, @IsActive)";
 
-        return _dbConnection.ExecuteAsync(query, newUser , _dbTransaction);
+        return _dbConnection.ExecuteAsync(query, newUser, _dbTransaction);
     }
 
     public Task<User?> GetUserById(int id)

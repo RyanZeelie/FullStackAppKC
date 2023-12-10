@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using CMApi.Models.Requests;
 using CMApi.Models.Responses;
+using CMApi.Repositories;
 using CMApi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -13,13 +14,15 @@ namespace CMApi.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
     private readonly IAuthService _authService;
 
     private string AuthScheme;
 
-    public AuthController(IUserService userService, IAuthService authService, IConfiguration config)
+    public AuthController(IUserService userService, IUserRepository userRepository, IAuthService authService, IConfiguration config)
     {
         _userService = userService;
+        _userRepository = userRepository;
         _authService = authService;
         AuthScheme = config.GetSection("Cookie:SchemeName").Value;
     }
@@ -29,6 +32,7 @@ public class AuthController : ControllerBase
     [Route("/auth-check")]
     public IActionResult AuthCheck()
     {
+        
         Thread.Sleep(1000);
 
         return Ok("Authenticated");
@@ -56,6 +60,7 @@ public class AuthController : ControllerBase
         return Ok(loginResponse);
     }
 
+    [Authorize]
     [HttpPost]
     [Route("/logout")]
     public async Task<IActionResult> Logout()
@@ -75,5 +80,15 @@ public class AuthController : ControllerBase
         await _userService.CreateUser(request);
 
         return Ok();
+    }
+
+    [Authorize(Roles = "SuperUser")]
+    [HttpGet]
+    [Route("/get-all-users")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userRepository.GetUsers();
+
+        return Ok(users);
     }
 }
