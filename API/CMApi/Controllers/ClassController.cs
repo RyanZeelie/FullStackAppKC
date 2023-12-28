@@ -24,7 +24,7 @@ public class ClassController : ControllerBase
     public async Task<ActionResult<List<Class>>> GetClasses()
     {
         var classes = await _classService.GetClasses();
-
+        
         return Ok(classes);
     }
 

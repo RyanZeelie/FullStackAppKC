@@ -10,7 +10,8 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_NAME = 'Leve
 BEGIN
     CREATE TABLE Level (
         Id INT IDENTITY(1,1) PRIMARY KEY,
-        Name VARCHAR(100) NOT NULL
+        Name VARCHAR(100) NOT NULL,
+        Total INT NOT NULL
     );
 END
 
@@ -18,7 +19,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_NAME = 'Cour
 BEGIN
     CREATE TABLE Course (
         Id INT IDENTITY(1,1) PRIMARY KEY,
-        CourseName VARCHAR(20) NOT NULL
+        Name VARCHAR(20) NOT NULL
     );
 END
 
@@ -43,7 +44,7 @@ BEGIN
         LevelId INT NOT NULL,
         FOREIGN KEY (LevelId) REFERENCES Level(Id),
         StartDate DATETIME,
-        EndDate DATETIME,
+        EndDate DATETIME
     );
 END
 
@@ -53,10 +54,61 @@ BEGIN
         Id INT IDENTITY(1,1) PRIMARY KEY,
         EnglishName VARCHAR(20) NOT NULL,
         Surname VARCHAR(20),
-        ChineseName VARCHAR(50),
-        ClassId INT,
-        FOREIGN KEY (ClassId) REFERENCES Class(Id)
+        ChineseName NVARCHAR(50),
+        GradeCourseId INT
+        FOREIGN KEY (GradeCourseId) REFERENCES GradeCourse(Id)
     );
 END
 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Semester')
+BEGIN
+    CREATE TABLE Semester (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        SemesterNumber INT NOT NULL,
+        ClassId INT NOT NULL,
+        FOREIGN KEY (ClassId) REFERENCES Class(Id),
+        StartDate DATETIME,
+        EndDate DATETIME
+    );
+END
 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Score')
+BEGIN
+    CREATE TABLE Score (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        StudentId INT NOT NULL,
+        FOREIGN KEY (StudentId) REFERENCES Student(Id),
+        SemesterId INT NOT NULL,
+        FOREIGN KEY (SemesterId) REFERENCES Semester(Id),
+        IsTestTaken BIT,
+        Recommendation NVARCHAR(200),
+        Listening DECIMAL (10,2),
+        Reading DECIMAL (10,2),
+        Writing DECIMAL (10,2),
+        IsActive BIT DEFAULT 1,
+        IsLocked BIT DEFAULT 0
+    );
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'User')
+BEGIN
+    CREATE TABLE [User] (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        FirstName VARCHAR(20) NOT NULL,
+        LastName VARCHAR(20) NOT NULL,
+        Email VARCHAR(20) NOT NULL,
+        HashedPassword VARCHAR(60),
+        CreateDate DATETIME,
+        IsActive BIT NOT NULL,
+        PasswordResetToken UNIQUEIDENTIFIER
+    );
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Role')
+BEGIN
+    CREATE TABLE Role (
+        Id INT IDENTITY(1,1) PRIMARY KEY,
+        Name VARCHAR(20) NOT NULL,
+        Description VARCHAR(150) NOT NULL
+    );
+END

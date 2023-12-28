@@ -1,18 +1,20 @@
 using System.Net;
 using CMApi.Extensions;
 using CMApi.MiddleWare;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
-
+builder.Services.AddOptionsConfig(configuration);
+builder.Services.AddHangfireServices(configuration);
 builder.Services.AddDataContext(configuration);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+
 builder.Services.AddCors();
-builder.Services.AddRedisCache(configuration);
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -63,6 +65,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+
+
+app.UseHangfireDashboard();
 
 app.MapControllers();
 

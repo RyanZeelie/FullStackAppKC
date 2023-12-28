@@ -1,13 +1,10 @@
 import create from "zustand";
 import axiosClient from "../api/AxiosClient";
 import { toast } from "react-toastify";
+
 const useAuthStore = create((set) => ({
   isAuthenticated: false,
-  authCheckLoading: false,
   user: null,
-  login:async()=>{
-
-  },
   logout: async () => {
     try {
       await axiosClient.post("/logout");
@@ -15,25 +12,23 @@ const useAuthStore = create((set) => ({
     } catch (err) {
       toast.error("Error logging out");
     }
+    finally{
+      window.location = '/login'
+    }
   },
   checkAuth: async () => {
     try {
-      set({ authCheckLoading: true });
-
-      await axiosClient.get("/auth-check");
-
-      set({ isAuthenticated: true });
-      set({ authCheckLoading: false });
+      let response = await axiosClient.get("/auth-check");
+      set({ isAuthenticated: true, user : response.data });
     } catch (err) {
       toast.error("Authentication Failed. Please Login");
-      
       set({ isAuthenticated: false });
-      set({ authCheckLoading: false });
+      window.location = '/login'
     }
   },
-  setAuthenticated: (val) => {
-    set({ isAuthenticated: val });
-  },
+  setAuthenticated:(authState, user)=>{
+    set({ isAuthenticated: authState, user: user });
+  }
 }));
 
 export default useAuthStore;

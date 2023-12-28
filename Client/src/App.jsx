@@ -12,37 +12,35 @@ import Levels from "./pages/levels/Levels";
 import GradesCourse from "./pages/gradesCourse/GradesCourse";
 import Login from "./pages/login/Login";
 import Users from "./pages/users/Users";
-import useAuthStore from "./stores/AuthStore";
-import NotificationDialogue from "./components/common/modals/NotificationDialogue";
+import PasswordReset from "./pages/passwordReset/PasswordReset";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 function App() {
-  const { isAuthenticated, checkAuth, authCheckLoading } = useAuthStore(
-    (state) => state
-  );
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
   return (
     <>
-      {authCheckLoading ? (
-        <NotificationDialogue message={"Checking Authentication"} />
-      ) : !isAuthenticated ? (
-        <Login />
-      ) : (
-        <Layout>
-          <Routes>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/password-reset/:resetToken?"
+          element={<PasswordReset />}
+        />
+        <Route element={<ProtectedRoute allowedRoles={["SuperUser"]} />}>
+        
+          <Route path="/users" element={<Users />} />
+          <Route path="/grades" element={<Grades />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/levels" element={<Levels />} />
+          <Route path="/gradeCourse" element={<GradesCourse />} />
+        </Route>
+
+        <Route
+          element={<ProtectedRoute allowedRoles={["SuperUser", "Teacher"]} />}
+        >
             <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/grades" element={<Grades />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/levels" element={<Levels />} />
-            <Route path="/gradeCourse" element={<GradesCourse />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/students" element={<Students />} />
-            <Route path="/overview/:gradeId" element={<Overview />} />
-          </Routes>
-        </Layout>
-      )}
+          <Route path="/classes" element={<Classes />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/overview/:gradeId" element={<Overview />} />
+        </Route>
+      </Routes>
     </>
   );
 }

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Input from "../../../components/common/inputs/Input";
-import Select from "../../../components/common/inputs/Select";
-import { v4 as uuidv4 } from "uuid";
+import ConfirmButton from "../../../components/common/buttons/ConfirmButton";
+import { useMutation } from "react-query";
+import { reActivateUser } from "../../../api/usersAPI";
 function AddEdit({
   values,
   handleChange,
-  errors,
-  setFieldValue,
-  validateField,
+  errors
 }) {
+  const { data, mutate, isLoading } = useMutation(reActivateUser);
+
   return (
     <>
       <Input
@@ -35,6 +36,9 @@ function AddEdit({
         onChange={handleChange}
         error={errors.email}
       />
+      {values.id != 0 && (
+        <ConfirmButton loading={isLoading} label="Re Authorize" action={() => mutate(values)} />
+      )}
     </>
   );
 }

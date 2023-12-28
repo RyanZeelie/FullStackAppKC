@@ -32,10 +32,21 @@ public class AuthController : ControllerBase
     [Route("/auth-check")]
     public IActionResult AuthCheck()
     {
-        
-        Thread.Sleep(1000);
 
-        return Ok("Authenticated");
+        Thread.Sleep(2000);
+
+        var roles =
+            User
+                .FindAll(claim => claim.Type == ClaimTypes.Role)
+                    .Select(c => c.Value);
+
+        var response = new LoginResponse
+        {
+            FirstName = User.Identity.Name,
+            Roles = roles
+        };
+
+        return Ok(response);
     }
 
     [HttpPost]
@@ -43,24 +54,23 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var claimsPrincipal = await _authService.LoginUser(request);
-   
+
         await HttpContext.SignInAsync(AuthScheme, claimsPrincipal);
 
-        var roles = 
+        var roles =
             claimsPrincipal
                 .FindAll(claim => claim.Type == ClaimTypes.Role)
-                    .Select(c => c.Value).ToList();
+                    .Select(c => c.Value);
 
-        var loginResponse = new LoginResponse 
-        { 
-            FirstName = claimsPrincipal.Identity.Name, 
-            Roles = roles 
+        var loginResponse = new LoginResponse
+        {
+            FirstName = claimsPrincipal.Identity.Name,
+            Roles = roles
         };
 
         return Ok(loginResponse);
     }
 
-    [Authorize]
     [HttpPost]
     [Route("/logout")]
     public async Task<IActionResult> Logout()
@@ -70,6 +80,41 @@ public class AuthController : ControllerBase
         await HttpContext.SignOutAsync(AuthScheme);
 
         return Ok("Logged out successfully");
+    }
+
+    [HttpGet]
+    [Route("/verify-reset-token")]
+    public async Task<IActionResult> VerifyToken([FromQuery] string resetToken)
+    {
+        var resetTokenExists = await _authService.DoesResetTokenExist(resetToken);
+
+        return Ok(resetTokenExists);
+    }
+
+    [HttpPost]
+    [Route("/update-password")]
+    public async Task<IActionResult> UpdatePassword(PasswordUpdateRequest request)
+    {
+        var resetTokenExists = await _authService.DoesResetTokenExist(request.PasswordResetToken);
+
+        if(!resetTokenExists)
+        {
+            return BadRequest();
+        }
+
+        await _authService.UpdatePassword(request);
+
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("/re-activate-user")]
+    public async Task<IActionResult> ReActivate(ReActivateRequest request)
+    {
+        await _userService.ReActivateUser(request);
+
+        return Ok();
     }
 
     [Authorize]

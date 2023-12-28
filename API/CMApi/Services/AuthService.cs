@@ -1,4 +1,5 @@
 ﻿using CMApi.Helpers;
+using CMApi.Models.DomainModels;
 using CMApi.Models.Requests;
 using CMApi.Repositories;
 using System.Security.Claims;
@@ -30,15 +31,50 @@ public class AuthService : IAuthService
             throw new Exception("Invalid Email or Password");
         }
 
+        var claimsPrincipal = await GetClaimsPrincipal(user);
+
+        return claimsPrincipal;
+    }
+
+    private async Task<ClaimsPrincipal> GetClaimsPrincipal(User user)
+    {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, $"{user.FirstName}:{user.LastName}"),
-            new Claim(ClaimTypes.Role, "SuperUser")
+            new Claim(ClaimTypes.Name, $"{user.FirstName}:{user.LastName}")
         };
+
+        var roles = await _userRepository.GetRolesForUser(user.Id);
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
         return claimsPrincipal;
+    }
+
+    public async Task<bool> DoesResetTokenExist(string resetToken)
+    {
+        try
+        {
+            var token = Guid.Parse(resetToken);
+            var tokenFromDatabase = await _userRepository.DoesResetTokenExist(token);
+
+            return tokenFromDatabase == token;
+        }
+        catch (Exception ex)
+        {
+            throw new BadHttpRequestException("Invalid Request");
+        }
+    }
+
+    public Task UpdatePassword(PasswordUpdateRequest request)
+    {
+        var hashedPassword = AuthHelpers.EncryptPassword(request.Password);
+
+        return _userRepository.UpdatePassword(hashedPassword, request.PasswordResetToken);
     }
 }

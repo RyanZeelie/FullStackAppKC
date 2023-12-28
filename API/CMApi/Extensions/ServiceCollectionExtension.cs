@@ -1,7 +1,9 @@
-﻿using CMApi.Data;
+﻿using CMApi.Config;
+using CMApi.Data;
 using CMApi.Factories;
 using CMApi.Repositories;
 using CMApi.Services;
+using Hangfire;
 using Microsoft.Data.SqlClient;
 
 namespace CMApi.Extensions;
@@ -23,6 +25,23 @@ public static class ServiceCollectionExtension
         return services;
     }
 
+    public static IServiceCollection AddOptionsConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<EmailConfig>(configuration.GetSection("Mail"));
+
+        return services;
+    }
+
+    public static IServiceCollection AddHangfireServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        string connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
+        services.AddHangfireServer();
+
+        return services;
+    }
+
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddTransient<IAdminService, AdminService>();
@@ -32,6 +51,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IViewModelFactory, ViewModelFactory>();
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IAuthService, AuthService>();
+        services.AddScoped<IMailService, MailService>();
 
         return services;
     }
@@ -43,16 +63,6 @@ public static class ServiceCollectionExtension
         services.AddTransient<IStudentRepository, StudentRepository>();
         services.AddTransient<IManagementRepository, ManagementRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
-    {
-        var redisServer = configuration.GetSection("Redis:Server").Value;
-        var defaultExpiry = int.Parse(configuration.GetSection("Redis:ExpiryInMintues").Value);
-
-        services.AddSingleton<ICachingService, CachingService>(x => new CachingService(redisServer, TimeSpan.FromMinutes(defaultExpiry)));
 
         return services;
     }

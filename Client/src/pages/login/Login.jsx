@@ -5,13 +5,16 @@ import { login } from "../../api/AuthAPI";
 import useAuthStore from "../../stores/AuthStore";
 import GeneralNote from "../../components/common/notifications/GeneralNote";
 import Input from "../../components/common/inputs/Input";
+import { useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate()
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
   const [loginError, setLoginError] = useState(null)
   const { setAuthenticated } = useAuthStore((state) => state);
   const { data, mutate: doLogin } = useMutation(login, {
-    onSuccess: (data) => {
-      setAuthenticated(true)
+    onSuccess: (user) => {
+      setAuthenticated(true, user)
+      navigate('/')
     },
     onError: (data) => {
       setLoginError(data.response.data.message)

@@ -89,7 +89,8 @@ function Courses() {
         <AddEdit values={values} handleChange={handleChange} errors={errors} />
       </FormModal>
       <DataGrid
-        action={handleCreate}
+       
+        actions={[{actionLabel : "Create Course", actionFunc: handleCreate}]}
         columns={columns}
         data={data}
         loading={isFetching}

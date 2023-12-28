@@ -1,11 +1,13 @@
 import React from "react";
+import ButtonLoading from "../loadingUi/ButtonLoading";
 
 const ConfirmButton = ({
   action = () => {},
   disabled = false,
   label = "Cancel",
+  loading = false,
 }) => {
-  return (
+  return loading === false ? (
     <button
       className={`${
         disabled ? "bg-gray-400" : "bg-blue-400 hover:bg-blue-500"
@@ -15,6 +17,8 @@ const ConfirmButton = ({
     >
       {label}
     </button>
+  ) : (
+    <ButtonLoading />
   );
 };
 

@@ -1,5 +1,7 @@
 ﻿using CMApi.Data;
 using CMApi.Models.DomainModels;
+using CMApi.Models.Requests;
+using CMApi.Models.Responses;
 using Dapper;
 using System.Data;
 
@@ -32,12 +34,23 @@ public class UserRepository : IUserRepository
         return users.ToList();
     }
 
-    public Task CreateUser(User newUser)
+    public async Task<CreateUserResponse> CreateUser(User newUser)
     {
-        var query = @"INSERT INTO [User] (FirstName, LastName, Email, HashedPassword, CreateDate, IsActive)
-                         VALUES (@FirstName, @LastName, @Email, @HashedPassword, @CreateDate, @IsActive)";
+        var newUserResponse = new CreateUserResponse();
 
-        return _dbConnection.ExecuteAsync(query, newUser, _dbTransaction);
+        var passwordResetToken = Guid.NewGuid();
+
+        var query = @"INSERT INTO [User] (FirstName, LastName, Email, CreateDate, IsActive, PasswordResetToken)
+                         VALUES (@FirstName, @LastName, @Email, @CreateDate, 0, @PasswordResetToken)
+                    SELECT SCOPE_IDENTITY()";
+
+        var newUserId =  await _dbConnection.QueryFirstOrDefaultAsync<int>(query, new { FirstName = newUser.FirstName, LastName = newUser.LastName, Email = newUser.Email, CreateDate = newUser.CreateDate, PasswordResetToken = passwordResetToken }, _dbTransaction);
+
+        newUserResponse.Id  = newUserId;    
+        newUserResponse.PasswordResetToken = passwordResetToken;
+        newUserResponse.Email = newUser.Email;
+
+        return newUserResponse;
     }
 
     public Task<User?> GetUserById(int id)
@@ -57,6 +70,7 @@ public class UserRepository : IUserRepository
     public Task<User?> GetUserForLogin(string email)
     {
         var query = @"SELECT
+                        Id,
                         FirstName,
                         LastName,
                         Email,
@@ -64,9 +78,24 @@ public class UserRepository : IUserRepository
                         CreateDate,
                         IsActive
                     FROM [User]
-                    WHERE Email = @Email";
+                    WHERE Email = @Email
+                        AND IsActive = 1";
 
         return _dbConnection.QueryFirstOrDefaultAsync<User>(query, new { Email = email }, _dbTransaction);
+    }
+
+    public async Task<IEnumerable<string>> GetRolesForUser(int userId)
+    {
+        var query = @"SELECT
+                        r.Name
+                    FROM UsersRoles ur
+                    JOIN Role r
+                        ON r.Id = ur.RoleId
+                    WHERE ur.UserId = @UserId";
+
+        var roles = await _dbConnection.QueryAsync<string>(query, new { UserId = userId }, _dbTransaction);
+
+        return roles;
     }
 
     public Task UpdateUser(User existingUser)
@@ -80,5 +109,53 @@ public class UserRepository : IUserRepository
                     WHERE Id = @Id";
 
         return _dbConnection.ExecuteAsync(query, new { existingUser }, _dbTransaction);
+    }
+
+    public Task<Guid?> DoesResetTokenExist(Guid resetToken)
+    {
+        var query = @"SELECT
+                        PasswordResetToken
+                    FROM [USER]
+                    WHERE PasswordResetToken = @PasswordResetToken";
+
+        return _dbConnection.QueryFirstOrDefaultAsync<Guid?>(query, new { PasswordResetToken  = resetToken }, _dbTransaction); 
+    } 
+
+    public void RemovePasswordResetToken(int userId)
+    {
+        var query = @"UPDATE [USER]
+                        SET PasswordResetToken = null
+                    WHERE Id = @Id";
+
+        _dbConnection.Execute(query, new { Id = userId }, _dbTransaction);
+    }
+
+    public Task UpdatePassword(string hashedPassword, string passwordResetToken)
+    {
+        var query = @"UPDATE [USER]
+                        SET 
+                            PasswordResetToken = null,
+                            HashedPassword = @HashedPassword,
+                            IsActive = 1
+                    WHERE PasswordResetToken = @PasswordResetToken";
+
+        return _dbConnection.ExecuteAsync(query, new { PasswordResetToken = passwordResetToken, HashedPassword = hashedPassword }, _dbTransaction);
+    }
+
+    public Task<User> ReActivateUser(int userId, string passwordResetToken)
+    {
+        var query = @"UPDATE [USER]
+                        SET
+                            PasswordResetToken = @PasswordResetToken,
+                            IsActive = 0,
+                            HashedPassword = ''
+                    WHERE Id = @Id
+                    
+                    SELECT
+                        *
+                    FROM [User]
+                    WHERE Id = @Id";
+
+        return _dbConnection.QueryFirstAsync<User>(query, new { PasswordResetToken = passwordResetToken, Id = userId }, _dbTransaction);
     }
 }

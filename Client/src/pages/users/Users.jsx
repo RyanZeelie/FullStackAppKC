@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { EditIcon } from "../../components/common/icons/Icons";
 import ToolTip from "../../components/common/tooltip/ToolTipWrapper";
 import DataGrid from "../../components/datagrid/DataGrid";
-import { useQuery } from "react-query";
-import { getAllUsers } from "../../api/usersAPI";
+import { useMutation, useQuery } from "react-query";
+import { createUser, getAllUsers } from "../../api/usersAPI";
 import FormModal from "../../components/common/modals/FormModal";
 import AddEdit from "../users/components/AddEdit";
 import { useFormik } from "formik";
+import TableChip from "../../components/common/chips/TableChip";
 
 const initialFormState = {
     id: 0,
@@ -17,8 +18,9 @@ const initialFormState = {
   
 function Users() {
   const { data: users } = useQuery("users", getAllUsers);
+  const {mutate : createNewUser} = useMutation(createUser)
   const [modalOpen, setModalOpen] = useState(false)
-  const [userForUpdate, setUserForUpdate] = useState(null)
+
   const handleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -66,6 +68,14 @@ function Users() {
         return new Date(row.createDate).toLocaleDateString();
       },
     },
+    {
+      header: "Status",
+      dataIdentifier: "isActive",
+      renderCell: (row) => {
+        return <TableChip text={row.isActive ? "Active" : "Inactive"}  bgColor={row.isActive ? 'green' : 'red'}/>
+        return 
+      },
+    },
   ];
 
   const {
@@ -82,12 +92,14 @@ function Users() {
       id: 0,
       firstName: "",
       lastName: "",
-      email: ""
+      email: "",
+      IsActive :0
     },
  //   validationSchema: validation,
     validateOnMount: true,
     onSubmit: (vals) => {
-     
+        console.log(vals)
+        vals.id === 0 ? createNewUser(vals) : null
     },
   });
 
