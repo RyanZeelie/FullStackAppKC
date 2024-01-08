@@ -5,7 +5,8 @@ const userRoutes = {
   createUser: `/create-user`,
   verifyResetToken: `/verify-reset-token`,
   updatePassword: `/update-password`,
-  reActivate : `/re-activate-user`
+  reActivate : `/re-activate-user`,
+  getRoles : '/get-roles'
 };
 
 export const getAllUsers = async () => {
@@ -33,3 +34,8 @@ export const reActivateUser = async (user) => {
   let response = await axiosClient.post(userRoutes.reActivate, user);
   return response.data;
 };
+
+export const getUserRolesList = async () =>{
+  let response = await axiosClient.get(userRoutes.getRoles);
+  return response.data;
+}

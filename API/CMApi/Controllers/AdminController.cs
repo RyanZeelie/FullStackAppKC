@@ -1,4 +1,5 @@
 ﻿using CMApi.Models.DomainModels;
+using CMApi.Repositories;
 using CMApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,18 +9,18 @@ namespace CMApi.Controllers;
 [ApiController]
 public class AdminController : ControllerBase
 {
-    private readonly IAdminService _adminService;
+    private readonly IAdminRepository _adminRepository; 
 
-    public AdminController(IAdminService adminService)
+    public AdminController(IAdminRepository adminRepository)
     {
-        _adminService = adminService;
+        _adminRepository = adminRepository;
     }
 
     [HttpGet]
     [Route("/get-grades")]
     public async Task<ActionResult<List<Grade>>> GetGrades()
     {
-        var grades =  await _adminService.GetAllGrades();
+        var grades =  await _adminRepository.GetGrades();
 
         return Ok(grades);
     }
@@ -28,7 +29,7 @@ public class AdminController : ControllerBase
     [Route("/get-courses")]
     public async Task<ActionResult<List<Course>>> GetCourses()
     {
-        var courses = await _adminService.GetAllCourses();
+        var courses = await _adminRepository.GetCourses();
 
         return Ok(courses);
     }
@@ -37,7 +38,7 @@ public class AdminController : ControllerBase
     [Route("/get-levels")]
     public async Task<ActionResult<List<Level>>> GetLevels()
     {
-        var courses = await _adminService.GetAllLevels();
+        var courses = await _adminRepository.GetLevels();
 
         return Ok(courses);
     }
@@ -46,7 +47,7 @@ public class AdminController : ControllerBase
     [Route("/get-grade-course")]
     public async Task<ActionResult<List<Level>>> GetGradeCourse()
     {
-        var gradesCourses = await _adminService.GetGradesCourses();
+        var gradesCourses = await _adminRepository.GetGradesCourses();
 
         return Ok(gradesCourses);
     }
@@ -55,7 +56,7 @@ public class AdminController : ControllerBase
     [Route("/create-grade")]
     public async Task<IActionResult> CreateGrade(Grade grade)
     {
-        await _adminService.CreateGrade(grade);
+        await _adminRepository.CreateGrade(grade);
 
         return Ok();
     }
@@ -64,7 +65,7 @@ public class AdminController : ControllerBase
     [Route("/create-course")]
     public async Task<IActionResult> CreateCourse(Course course)
     {
-        await _adminService.CreateCourse(course);
+        await _adminRepository.CreateCourse(course);
 
         return Ok();
     }
@@ -73,7 +74,7 @@ public class AdminController : ControllerBase
     [Route("/create-level")]
     public async Task<IActionResult> CreateLevel(Level level)
     {
-        await _adminService.CreateLevel(level);
+        await _adminRepository.CreateLevel(level);
 
         return Ok();
     }
@@ -82,7 +83,7 @@ public class AdminController : ControllerBase
     [Route("/create-grade-course")]
     public async Task<IActionResult> CreateGradeCourse(GradeCourse gradeCourse)
     {
-        await _adminService.CreateGradeCourse(gradeCourse);
+        await _adminRepository.CreateGradeCourse(gradeCourse);
 
         return Ok();
     }
@@ -91,7 +92,7 @@ public class AdminController : ControllerBase
     [Route("/update-grade")]
     public async Task<IActionResult> UpdateGrade(Grade grade)
     {
-        await _adminService.UpdateGrade(grade);
+        await _adminRepository.UpdateGrade(grade);
 
         return Ok();
     }
@@ -100,7 +101,7 @@ public class AdminController : ControllerBase
     [Route("/update-course")]
     public async Task<IActionResult> UpdateCourse(Course course)
     {
-        await _adminService.UpdateCourse(course);
+        await _adminRepository.UpdateCourse(course);
 
         return Ok();
     }
@@ -109,7 +110,7 @@ public class AdminController : ControllerBase
     [Route("/update-level")]
     public async Task<IActionResult> UpdateLevel(Level level)
     {
-        await _adminService.UpdateLevel(level);
+        await _adminRepository.UpdateLevel(level);
 
         return Ok();
     }
@@ -118,7 +119,7 @@ public class AdminController : ControllerBase
     [Route("/update-grade-course")]
     public async Task<IActionResult> UpdateGradeCourse(GradeCourse gradeCourse)
     {
-        await _adminService.UpdateGradeCourse(gradeCourse);
+        await _adminRepository.UpdateGradeCourse(gradeCourse);
 
         return Ok();
     }

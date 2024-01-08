@@ -53,6 +53,15 @@ public class UserRepository : IUserRepository
         return newUserResponse;
     }
 
+    public Task AssignUserToRole(int userId, int roleId)
+    {
+
+        var query = @"INSERT INTO UsersRoles (UserId, RoleId)
+                         VALUES (@UserId, @RoleId)";
+
+        return _dbConnection.ExecuteAsync(query, new { UserId = userId, RoleId = roleId }, _dbTransaction);
+    }
+
     public Task<User?> GetUserById(int id)
     {
         var query = @"SELECT
@@ -157,5 +166,16 @@ public class UserRepository : IUserRepository
                     WHERE Id = @Id";
 
         return _dbConnection.QueryFirstAsync<User>(query, new { PasswordResetToken = passwordResetToken, Id = userId }, _dbTransaction);
+    }
+
+    public async Task<List<Role>> GetRoles()
+    {
+        var query = @"SELECT
+                        *
+                    FROM Role";
+
+        var roles = await _dbConnection.QueryAsync<Role>(query, _dbTransaction);
+
+        return roles.ToList();
     }
 }

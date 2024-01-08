@@ -4,6 +4,7 @@ using CMApi.Repositories;
 using CMApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace CMApi.Controllers;
 
 [Route("api/[controller]")]
@@ -12,11 +13,13 @@ public class ClassController : ControllerBase
 {
     private readonly IClassService _classService;
     private readonly IClassRepository _classRepository;
+    private readonly ILogger<ClassController> _logger;
 
-    public ClassController(IClassService classService, IClassRepository classRepository)
+    public ClassController(IClassService classService, IClassRepository classRepository, ILogger<ClassController> logger)
     {
         _classService = classService;
         _classRepository = classRepository;
+        _logger = logger;
     }
 
     [HttpGet]

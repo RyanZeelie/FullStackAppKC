@@ -1,4 +1,6 @@
-﻿using CMApi.Models.DomainModels;
+﻿using CMApi.Data;
+using CMApi.Helpers;
+using CMApi.Models.DomainModels;
 using CMApi.Models.Requests;
 using CMApi.Models.Responses;
 using CMApi.Repositories;
@@ -7,10 +9,15 @@ namespace CMApi.Services;
 
 public class StudentService : IStudentService
 {
-    private readonly IStudentRepository _studentRepository;    
-    public StudentService(IStudentRepository studentRepository)
+    private readonly ILogger<StudentService> _logger;
+    private readonly IStudentRepository _studentRepository;
+    private readonly IDataContext _context;
+
+    public StudentService(IStudentRepository studentRepository, IDataContext context, ILogger<StudentService> logger)
     {
         _studentRepository = studentRepository;
+        _context = context;
+        _logger = logger;
     }
     public Task CreateStudent(Student student)
     {
@@ -34,29 +41,49 @@ public class StudentService : IStudentService
 
     public async Task AddStudentsToClass(AddStudentToClassRequest request)
     {
-        foreach (var studentId in request.StudentIds)
+        using var transaction = _context.BeginTransaction();
+
+        try
         {
-            var existingScoreCard = await _studentRepository.GetExistingScoreCardForStudent(request.SemesterId, studentId);
-
-            if(existingScoreCard is null) 
+            foreach (var studentId in request.StudentIds)
             {
-                var scoreCard = new Score()
+                var existingScoreCard = await _studentRepository.GetExistingScoreCardForStudent(request.SemesterId, studentId);
+
+                var logMessage = LogMessageHelpers.CreateSuccessfulProcessLogMessage("Student added to class and score card created");
+
+                if (existingScoreCard is null)
                 {
-                    StudentId = studentId,
-                    SemesterId = request.SemesterId,
-                    IsTestTaken = false,
-                    Recommendation = null,
-                    Listening = 0,
-                    Reading = 0,
-                    Writing = 0
-                };
+                    var scoreCard = new Score()
+                    {
+                        StudentId = studentId,
+                        SemesterId = request.SemesterId,
+                        IsTestTaken = false,
+                        Recommendation = null,
+                        Listening = 0,
+                        Reading = 0,
+                        Writing = 0
+                    };
 
-                await _studentRepository.AddStudentToClass(scoreCard);
+                    await _studentRepository.AddStudentToClass(scoreCard);
+                }
+                else
+                {
+                    await _studentRepository.ReActivateScoreCard(existingScoreCard.Id);
+
+                    logMessage = LogMessageHelpers.CreateSuccessfulProcessLogMessage("Student added to class and existing score card reactivated");
+                }
+
+                transaction.Commit();
+
+                _logger.LogError(logMessage);
             }
-            else
-            {
-                await _studentRepository.ReActivateScoreCard(existingScoreCard.Id);
-            }
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+
+            var logMessage = LogMessageHelpers.CreateExceptionLogMessage(ex.Message);
+            _logger.LogError(logMessage);
         }
     }
 }

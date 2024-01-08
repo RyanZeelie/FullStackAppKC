@@ -1,4 +1,5 @@
-﻿using CMApi.Models.DomainModels;
+﻿using System.Data;
+using CMApi.Models.DomainModels;
 using CMApi.Models.Responses;
 
 namespace CMApi.Repositories;
@@ -15,4 +16,6 @@ public interface IUserRepository
     void RemovePasswordResetToken(int userId);
     Task UpdatePassword(string hashedPassword, string passwordResetToken);
     Task<User> ReActivateUser(int userId, string passwordResetToken);
+    Task<List<Role>> GetRoles();
+    Task AssignUserToRole(int userId, int roleId);
 }

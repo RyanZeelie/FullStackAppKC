@@ -20,7 +20,7 @@ public class StudentController : ControllerBase
         _studentRepository = studentRepository;
     }
 
-    [Authorize(Roles = "SuperUser")]
+    [Authorize]
     [HttpGet]
     [Route("/get-students")]
     public async Task<ActionResult<Student>> GetStudents()

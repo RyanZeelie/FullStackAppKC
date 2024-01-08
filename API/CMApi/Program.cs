@@ -1,13 +1,24 @@
 using System.Net;
+using System.Reflection;
 using CMApi.Extensions;
 using CMApi.MiddleWare;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
+using Serilog.Exceptions;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 var configuration = builder.Configuration;
+
+ConfigureLogging(configuration);
+builder.Host.UseSerilog();
+
+
 builder.Services.AddOptionsConfig(configuration);
 builder.Services.AddHangfireServices(configuration);
 builder.Services.AddDataContext(configuration);
@@ -53,6 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandler>();
+app.UseMiddleware<PerfomanceLoggingMiddleware>();
 
 app.UseCors(x =>
     x.WithOrigins("https://127.0.0.1:3004") 
@@ -77,4 +89,28 @@ static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> co
 {
     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
     return Task.CompletedTask;
+}
+
+void ConfigureLogging(IConfiguration configuration)
+{
+    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .Enrich.WithExceptionDetails()
+        .WriteTo.Debug()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
+        .Enrich.WithProperty("Environment", environment)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+
+ElasticsearchSinkOptions ConfigureElasticSink(IConfiguration configuration, string environment)
+{
+    return new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+    };
 }

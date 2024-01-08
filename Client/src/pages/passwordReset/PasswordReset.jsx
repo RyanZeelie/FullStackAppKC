@@ -21,16 +21,15 @@ function PasswordReset() {
   let navigate = useNavigate();
   let { resetToken } = useParams();
 
-  const { mutate: updateUserPassword } = useMutation(updatePassword);
+  const { mutate: updateUserPassword } = useMutation(updatePassword,{  onSuccess: (data) => {
+    toast.success("Password Updated")
+    navigate("/login");
+  },});
 
   let { data: verified, refetch: verifyToken } = useQuery(
     [resetToken],
     verifyResetToken,
     {
-      onSuccess: (data) => {
-        toast.success("Password Updated")
-        navigate("/login");
-      },
       enabled: false,
       refetchOnMount: false,
     }

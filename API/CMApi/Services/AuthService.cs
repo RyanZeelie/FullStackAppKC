@@ -58,17 +58,11 @@ public class AuthService : IAuthService
 
     public async Task<bool> DoesResetTokenExist(string resetToken)
     {
-        try
-        {
-            var token = Guid.Parse(resetToken);
-            var tokenFromDatabase = await _userRepository.DoesResetTokenExist(token);
+            var parsedToken = Guid.Parse(resetToken);
 
-            return tokenFromDatabase == token;
-        }
-        catch (Exception ex)
-        {
-            throw new BadHttpRequestException("Invalid Request");
-        }
+            var tokenFromDatabase = await _userRepository.DoesResetTokenExist(parsedToken);
+
+            return tokenFromDatabase.HasValue;
     }
 
     public Task UpdatePassword(PasswordUpdateRequest request)

@@ -8,17 +8,21 @@ import FormModal from "../../components/common/modals/FormModal";
 import AddEdit from "../users/components/AddEdit";
 import { useFormik } from "formik";
 import TableChip from "../../components/common/chips/TableChip";
-
+import { toast } from "react-toastify";
 const initialFormState = {
     id: 0,
     firstName: "",
     lastName: "",
-    email: ""
+    email: "",
+    role:0
   };
   
 function Users() {
   const { data: users } = useQuery("users", getAllUsers);
-  const {mutate : createNewUser} = useMutation(createUser)
+  const {mutate : createNewUser, isLoading} = useMutation(createUser, {onSuccess:()=>{
+    toast.success("User Created");
+      handleModal();
+  }})
   const [modalOpen, setModalOpen] = useState(false)
 
   const handleModal = () => {
@@ -73,7 +77,6 @@ function Users() {
       dataIdentifier: "isActive",
       renderCell: (row) => {
         return <TableChip text={row.isActive ? "Active" : "Inactive"}  bgColor={row.isActive ? 'green' : 'red'}/>
-        return 
       },
     },
   ];
@@ -93,12 +96,12 @@ function Users() {
       firstName: "",
       lastName: "",
       email: "",
-      IsActive :0
+      IsActive :0,
+      role : 0
     },
  //   validationSchema: validation,
     validateOnMount: true,
     onSubmit: (vals) => {
-        console.log(vals)
         vals.id === 0 ? createNewUser(vals) : null
     },
   });
@@ -110,6 +113,7 @@ function Users() {
         modalTitle={`${values.id === 0 ? "Create" : "Edit"} User`}
         disabled={!isValid}
         submit={submitForm}
+        loading={isLoading}
       >
         <AddEdit
           values={values}

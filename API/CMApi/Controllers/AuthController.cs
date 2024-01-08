@@ -32,11 +32,7 @@ public class AuthController : ControllerBase
     [Route("/auth-check")]
     public IActionResult AuthCheck()
     {
-
-        Thread.Sleep(2000);
-
-        var roles =
-            User
+        var roles = User
                 .FindAll(claim => claim.Type == ClaimTypes.Role)
                     .Select(c => c.Value);
 
@@ -107,7 +103,7 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
-    [Authorize]
+    [Authorize (Roles = "SuperUser")]
     [HttpPost]
     [Route("/re-activate-user")]
     public async Task<IActionResult> ReActivate(ReActivateRequest request)
@@ -135,5 +131,15 @@ public class AuthController : ControllerBase
         var users = await _userRepository.GetUsers();
 
         return Ok(users);
+    }
+
+    [Authorize(Roles = "SuperUser")]
+    [HttpGet]
+    [Route("/get-roles")]
+    public async Task<IActionResult> GetAllRoles()
+    {
+        var roles = await _userRepository.GetRoles();
+
+        return Ok(roles);
     }
 }

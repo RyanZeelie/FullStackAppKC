@@ -5,7 +5,7 @@ import CancelButton from "../buttons/CancelButton";
 import { Link } from "react-router-dom";
 import useAuthStore from "../../../stores/AuthStore";
 const SideMenu = ({ openDrawer = true }) => {
-  const {logout} = useAuthStore(state=>state)
+  const {logout,user} = useAuthStore(state=>state)
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleCollapse = () => {
@@ -26,6 +26,7 @@ const SideMenu = ({ openDrawer = true }) => {
         <CancelButton label="Logout" action={logout} /> 
       </div>
       <hr />
+      {user.roles.includes("SuperUser") && <>
       <div className="flex items-center justify-between p-2">
         <p className="p-2">Admin</p>
         <button
@@ -48,6 +49,8 @@ const SideMenu = ({ openDrawer = true }) => {
         </ul>
       </div>
       <hr />
+      </> }
+
       <ul className="p-5">
         {Menu.map((menuItem) => (
           <Link to={menuItem.route} key={uuidv4()} className="mb-5 flex">

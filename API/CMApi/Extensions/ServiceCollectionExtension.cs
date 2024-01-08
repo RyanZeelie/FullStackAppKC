@@ -44,7 +44,6 @@ public static class ServiceCollectionExtension
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddTransient<IAdminService, AdminService>();
         services.AddTransient<IClassService, ClassService>();
         services.AddTransient<IStudentService, StudentService>();
         services.AddTransient<IManagementService, ManagementService>();
@@ -66,4 +65,12 @@ public static class ServiceCollectionExtension
 
         return services;
     }
+
+    //public static IServiceCollection AddLogging(this IServiceCollection services)
+    //{
+    //    var serviceProvider = services.BuildServiceProvider();
+    //    var logger = serviceProvider.GetService<ILogger>();
+    //    services.AddSingleton(typeof(ILogger), logger);
+    //    return services;
+    //}
 }

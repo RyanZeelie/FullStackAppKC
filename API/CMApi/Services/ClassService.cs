@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using CMApi.Data;
+using CMApi.Helpers;
 using CMApi.Models.DomainModels;
 using CMApi.Models.Requests;
 using CMApi.Repositories;
@@ -8,12 +9,14 @@ namespace CMApi.Services;
 
 public class ClassService : IClassService
 {
+    private readonly ILogger<ClassService> _logger;
     private readonly IClassRepository _classRepository;
     private readonly IStudentRepository _studentRepository; 
     private IDataContext _context;
 
-    public ClassService(IClassRepository classRepository, IStudentRepository studentRepository, IDataContext context)
+    public ClassService(ILogger<ClassService> logger, IClassRepository classRepository, IStudentRepository studentRepository, IDataContext context)
     {
+        _logger = logger;
         _classRepository = classRepository;
         _studentRepository = studentRepository;
         _context = context;
@@ -42,11 +45,13 @@ public class ClassService : IClassService
     public async Task StartClass(StartEndClassRequest classModel)
     {
         using var transaction = _context.BeginTransaction();
+
         try
         {
             var newSemesterId = await _classRepository.StartClass(classModel.ClassId, classModel.SemesterNumber);
 
             var scoreCards = new List<Score>();
+
             foreach (var studentId in classModel.StudentIds)
             {
                 scoreCards.Add(new Score()
@@ -64,23 +69,49 @@ public class ClassService : IClassService
             await _studentRepository.StartClass(newSemesterId, scoreCards);
 
             transaction.Commit();
+
+            var logMessage = LogMessageHelpers.CreateSuccessfulProcessLogMessage("Class Started");
+            _logger.LogInformation(logMessage);
         }
         catch(Exception ex)
         {
             transaction.Rollback();
+
+            var logMessage = LogMessageHelpers.CreateExceptionLogMessage(ex.Message);
+            _logger.LogError(logMessage);
         }
        
     }
 
     public async Task EndClass(StartEndClassRequest classModel)
     {
-        await _classRepository.EndClass(classModel.ClassId);
+        using var transaction = _context.BeginTransaction();
 
-        // If its not the 2th semester, restart the class with a new semester number
-        if (classModel.SemesterNumber != 2 && classModel.StudentIds.Count > 0)
+        try
         {
-            classModel.SemesterNumber++;
-            await StartClass(classModel);
+            await _classRepository.EndClass(classModel.ClassId);
+
+            var logMessage = LogMessageHelpers.CreateSuccessfulProcessLogMessage("Class Ended");
+            
+            // If its not the 2th semester, restart the class with a new semester number
+            if (classModel.SemesterNumber != 2 && classModel.StudentIds.Count > 0)
+            {
+                classModel.SemesterNumber++;
+                await StartClass(classModel);
+
+                logMessage = LogMessageHelpers.CreateSuccessfulProcessLogMessage("Class ended and new semester started");
+            }
+
+            transaction.Commit();   
+
+            _logger.LogInformation(logMessage);
+        }
+        catch(Exception ex)
+        {
+            transaction.Rollback();
+
+            var logMessage = LogMessageHelpers.CreateExceptionLogMessage(ex.Message);
+            _logger.LogError(logMessage);
         }
     }
 }
