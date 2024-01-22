@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class ManagementController : ControllerBase
 {
@@ -19,7 +19,7 @@ public class ManagementController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    [Route("/get-dashboard")]
+    [Route("get-dashboard")]
     public async Task<ActionResult<Student>> GetDashboardView()
     {
         var dashboardView = await _viewModelFactory.GetViewModel(ViewModelsEnum.Dashboard, 0);
@@ -28,7 +28,7 @@ public class ManagementController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-class-overview/{gradeCourseId}")]
+    [Route("get-class-overview/{gradeCourseId}")]
     public async Task<ActionResult<OverviewViewmodel>> GetClassOverView(int gradeCourseId)
     {
         var classOverview = await _viewModelFactory.GetViewModel(ViewModelsEnum.Overview, gradeCourseId);

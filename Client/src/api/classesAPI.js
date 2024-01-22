@@ -1,13 +1,11 @@
 import axiosClient from "./AxiosClient";
 
-// TODO : Create a default Axios Client
-const baseURL = "https://localhost:7232";
 const classRoutes = {
-  getAllClasses: `${baseURL}/get-classes`,
-  createClass: `${baseURL}/create-class`,
-  updateClass: `${baseURL}/update-class`,
-  startClass : `${baseURL}/start-class`,
-  endClass : `${baseURL}/end-class`
+  getAllClasses: `/get-classes`,
+  createClass: `/create-class`,
+  updateClass: `/update-class`,
+  startClass : `/start-class`,
+  endClass : `/end-class`
 };
 
 export const getClasses = async () => {

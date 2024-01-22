@@ -14,6 +14,7 @@ import Login from "./pages/login/Login";
 import Users from "./pages/users/Users";
 import PasswordReset from "./pages/passwordReset/PasswordReset";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
+
 function App() {
   return (
     <>
@@ -24,7 +25,6 @@ function App() {
           element={<PasswordReset />}
         />
         <Route element={<ProtectedRoute allowedRoles={["SuperUser"]} />}>
-        
           <Route path="/users" element={<Users />} />
           <Route path="/grades" element={<Grades />} />
           <Route path="/courses" element={<Courses />} />
@@ -35,7 +35,7 @@ function App() {
         <Route
           element={<ProtectedRoute allowedRoles={["SuperUser", "Teacher"]} />}
         >
-            <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/classes" element={<Classes />} />
           <Route path="/students" element={<Students />} />
           <Route path="/overview/:gradeId" element={<Overview />} />

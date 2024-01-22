@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class ClassController : ControllerBase
 {
@@ -23,7 +23,7 @@ public class ClassController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-classes")]
+    [Route("get-classes")]
     public async Task<ActionResult<List<Class>>> GetClasses()
     {
         var classes = await _classService.GetClasses();
@@ -32,7 +32,7 @@ public class ClassController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-class")]
+    [Route("create-class")]
     public async Task<IActionResult> CreateClass(Class classModel)
     {
         await _classService.CreateClass(classModel);
@@ -41,7 +41,7 @@ public class ClassController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-class")]
+    [Route("update-class")]
     public async Task<IActionResult> UpdateClass(Class classModel)
     {
         await _classService.UpdateClass(classModel);
@@ -50,7 +50,7 @@ public class ClassController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/start-class")]
+    [Route("start-class")]
     public async Task<IActionResult> StartClass(StartEndClassRequest request)
     {
         await _classService.StartClass(request);
@@ -59,7 +59,7 @@ public class ClassController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/end-class")]
+    [Route("end-class")]
     public async Task<IActionResult> EndClass(StartEndClassRequest request)
     {
         await _classService.EndClass(request);

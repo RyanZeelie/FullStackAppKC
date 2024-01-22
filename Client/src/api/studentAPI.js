@@ -1,15 +1,13 @@
 import axiosClient from "./AxiosClient";
 
-// TODO : Create a default Axios Client
-const baseURL = "https://localhost:7232";
 const studentRoutes = {
-  getAllStudents: `${baseURL}/get-students`,
-  createStudent: `${baseURL}/create-student`,
-  updateStudent: `${baseURL}/update-student`,
-  getStudentsByGrade: `${baseURL}/get-unassigned-students-by-grade`,
-  getCurrentSemesterStudents: `${baseURL}/get-students-for-current-semester`,
-  dropStudentFromClass: `${baseURL}/drop-student-from-class`,
-  addStudentsToClass: `${baseURL}/add-students-to-class`,
+  getAllStudents: `/get-students`,
+  createStudent: `/create-student`,
+  updateStudent: `/update-student`,
+  getStudentsByGrade: `/get-unassigned-students-by-grade`,
+  getCurrentSemesterStudents: `/get-students-for-current-semester`,
+  dropStudentFromClass: `/drop-student-from-class`,
+  addStudentsToClass: `/add-students-to-class`,
   updateScoreCard : "/update-score-card"
 };
 

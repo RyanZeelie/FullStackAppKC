@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class AdminController : ControllerBase
 {
@@ -17,7 +17,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-grades")]
+    [Route("get-grades")]
     public async Task<ActionResult<List<Grade>>> GetGrades()
     {
         var grades =  await _adminRepository.GetGrades();
@@ -26,7 +26,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-courses")]
+    [Route("get-courses")]
     public async Task<ActionResult<List<Course>>> GetCourses()
     {
         var courses = await _adminRepository.GetCourses();
@@ -35,7 +35,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-levels")]
+    [Route("get-levels")]
     public async Task<ActionResult<List<Level>>> GetLevels()
     {
         var courses = await _adminRepository.GetLevels();
@@ -44,7 +44,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-grade-course")]
+    [Route("get-grade-course")]
     public async Task<ActionResult<List<Level>>> GetGradeCourse()
     {
         var gradesCourses = await _adminRepository.GetGradesCourses();
@@ -53,7 +53,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-grade")]
+    [Route("create-grade")]
     public async Task<IActionResult> CreateGrade(Grade grade)
     {
         await _adminRepository.CreateGrade(grade);
@@ -62,7 +62,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-course")]
+    [Route("create-course")]
     public async Task<IActionResult> CreateCourse(Course course)
     {
         await _adminRepository.CreateCourse(course);
@@ -71,7 +71,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-level")]
+    [Route("create-level")]
     public async Task<IActionResult> CreateLevel(Level level)
     {
         await _adminRepository.CreateLevel(level);
@@ -80,7 +80,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-grade-course")]
+    [Route("create-grade-course")]
     public async Task<IActionResult> CreateGradeCourse(GradeCourse gradeCourse)
     {
         await _adminRepository.CreateGradeCourse(gradeCourse);
@@ -89,7 +89,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-grade")]
+    [Route("update-grade")]
     public async Task<IActionResult> UpdateGrade(Grade grade)
     {
         await _adminRepository.UpdateGrade(grade);
@@ -98,7 +98,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-course")]
+    [Route("update-course")]
     public async Task<IActionResult> UpdateCourse(Course course)
     {
         await _adminRepository.UpdateCourse(course);
@@ -107,7 +107,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-level")]
+    [Route("update-level")]
     public async Task<IActionResult> UpdateLevel(Level level)
     {
         await _adminRepository.UpdateLevel(level);
@@ -116,7 +116,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-grade-course")]
+    [Route("update-grade-course")]
     public async Task<IActionResult> UpdateGradeCourse(GradeCourse gradeCourse)
     {
         await _adminRepository.UpdateGradeCourse(gradeCourse);

@@ -29,9 +29,11 @@ function Login() {
       [name]: value,
     }));
   };
+
   const handleLogin = () => {
     doLogin(loginDetails);
   };
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gray-200">
       <div className="max-w-sm w-full bg-white rounded p-6 shadow-md">

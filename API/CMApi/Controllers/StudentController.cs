@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class StudentController : ControllerBase
 {
@@ -22,7 +22,7 @@ public class StudentController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    [Route("/get-students")]
+    [Route("get-students")]
     public async Task<ActionResult<Student>> GetStudents()
     {
         var students = await _studentService.GetStudents();
@@ -31,7 +31,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-unassigned-students-by-grade/{gradeCourseId}")]
+    [Route("get-unassigned-students-by-grade/{gradeCourseId}")]
     public async Task<ActionResult<Student>> GetUnassignedStudents(int gradeCourseId)
     {
         var students = await _studentRepository.GetUnassignedStudents(gradeCourseId);
@@ -40,7 +40,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get-students-for-current-semester/{semesterId}")]
+    [Route("get-students-for-current-semester/{semesterId}")]
     public async Task<ActionResult<Student>> GetCurrentSemesterStudents(int semesterId)
     {
         var students = await _studentRepository.GetCurrentSemesterStudents(semesterId);
@@ -49,7 +49,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/create-student")]
+    [Route("create-student")]
     public async Task<ActionResult<Student>> CreateStudent(Student student)
     {
         await _studentService.CreateStudent(student);
@@ -58,7 +58,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-student")]
+    [Route("update-student")]
     public async Task<ActionResult<Student>> UpdateStudent(Student student)
     {
         await _studentService.UpdateStudent(student);
@@ -67,7 +67,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/drop-student-from-class/{scoreCardId}")]
+    [Route("drop-student-from-class/{scoreCardId}")]
     public async Task<ActionResult<Student>> DropStudentFromClass(int scoreCardId)
     {
         await _studentRepository.DropStudentFromClass(scoreCardId);
@@ -76,7 +76,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/add-students-to-class")]
+    [Route("add-students-to-class")]
     public async Task<ActionResult<Student>> AddStudentToclass(AddStudentToClassRequest request)
     {
         await _studentService.AddStudentsToClass(request);
@@ -85,7 +85,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/update-score-card")]
+    [Route("update-score-card")]
     public async Task<ActionResult<Student>> UpdateScoreCard(UpdateScoreCardRequest request)
     {
         await _studentRepository.UpdateScoreCard(request);

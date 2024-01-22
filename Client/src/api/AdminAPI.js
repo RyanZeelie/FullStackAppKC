@@ -1,24 +1,23 @@
 import axiosClient from "./AxiosClient";
 
-// TODO : Create a default Axios Client
-const baseURL = "https://localhost:7232";
+
 const getRoutes = {
-  getAllGrades: `${baseURL}/get-grades`,
-  getAllCourses: `${baseURL}/get-courses`,
-  getAllLevels: `${baseURL}/get-levels`,
-  getAllGradesCourses: `${baseURL}/get-grade-course`,
+  getAllGrades: `/get-grades`,
+  getAllCourses: `/get-courses`,
+  getAllLevels: `/get-levels`,
+  getAllGradesCourses: `/get-grade-course`,
 };
 const createRoutes = {
-  createGrade: `${baseURL}/create-grade`,
-  createCourse: `${baseURL}/create-course`,
-  createLevel: `${baseURL}/create-level`,
-  createGradeCourse: `${baseURL}/create-grade-course`,
+  createGrade: `/create-grade`,
+  createCourse: `/create-course`,
+  createLevel: `/create-level`,
+  createGradeCourse: `/create-grade-course`,
 };
 const udpateRoutes = {
-  updateGrade: `${baseURL}/update-grade`,
-  updateCourse: `${baseURL}/update-course`,
-  updateLevel: `${baseURL}/update-level`,
-  updateGradeCourse: `${baseURL}/update-grade-course`,
+  updateGrade: `/update-grade`,
+  updateCourse: `/update-course`,
+  updateLevel: `/update-level`,
+  updateGradeCourse: `/update-grade-course`,
 };
 
 export const getGrades = async () => {

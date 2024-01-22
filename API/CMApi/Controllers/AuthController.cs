@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    [Route("/auth-check")]
+    [Route("auth-check")]
     public IActionResult AuthCheck()
     {
         var roles = User
@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/login")]
+    [Route("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var claimsPrincipal = await _authService.LoginUser(request);
@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/logout")]
+    [Route("logout")]
     public async Task<IActionResult> Logout()
     {
         HttpContext.Session.Clear();
@@ -79,7 +79,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/verify-reset-token")]
+    [Route("verify-reset-token")]
     public async Task<IActionResult> VerifyToken([FromQuery] string resetToken)
     {
         var resetTokenExists = await _authService.DoesResetTokenExist(resetToken);
@@ -88,7 +88,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/update-password")]
+    [Route("update-password")]
     public async Task<IActionResult> UpdatePassword(PasswordUpdateRequest request)
     {
         var resetTokenExists = await _authService.DoesResetTokenExist(request.PasswordResetToken);
@@ -105,7 +105,7 @@ public class AuthController : ControllerBase
 
     [Authorize (Roles = "SuperUser")]
     [HttpPost]
-    [Route("/re-activate-user")]
+    [Route("re-activate-user")]
     public async Task<IActionResult> ReActivate(ReActivateRequest request)
     {
         await _userService.ReActivateUser(request);
@@ -115,7 +115,7 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    [Route("/create-user")]
+    [Route("create-user")]
     public async Task<IActionResult> Create(CreateUserRequest request)
     {
         await _userService.CreateUser(request);
@@ -125,7 +125,7 @@ public class AuthController : ControllerBase
 
     [Authorize(Roles = "SuperUser")]
     [HttpGet]
-    [Route("/get-all-users")]
+    [Route("get-all-users")]
     public async Task<IActionResult> GetAllUsers()
     {
         var users = await _userRepository.GetUsers();
@@ -135,7 +135,7 @@ public class AuthController : ControllerBase
 
     [Authorize(Roles = "SuperUser")]
     [HttpGet]
-    [Route("/get-roles")]
+    [Route("get-roles")]
     public async Task<IActionResult> GetAllRoles()
     {
         var roles = await _userRepository.GetRoles();
