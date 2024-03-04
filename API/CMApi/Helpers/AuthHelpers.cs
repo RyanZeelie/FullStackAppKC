@@ -1,4 +1,8 @@
-﻿namespace CMApi.Helpers;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Net;
+
+namespace CMApi.Helpers;
 
 public static class AuthHelpers
 {
@@ -10,5 +14,11 @@ public static class AuthHelpers
     public static bool DecryptPassword(string plainTextPassword, string hashedPassword)
     {
         return BCrypt.Net.BCrypt.Verify(plainTextPassword, hashedPassword);
+    }
+
+    public static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        return Task.CompletedTask;
     }
 }

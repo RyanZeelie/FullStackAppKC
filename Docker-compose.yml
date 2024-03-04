@@ -15,14 +15,12 @@ services:
     build:
       context: ./API/CMApi
       dockerfile: Dockerfile
-    # Other configurations for your .NET API service
 
   frontend:
     build:
       context: ./Client
       dockerfile: Dockerfile
-    # Other configurations for your frontend service
-
+      
 networks:
   your_custom_network:
     name: your_custom_network

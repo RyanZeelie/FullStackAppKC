@@ -1,4 +1,5 @@
-﻿using CMApi.Enums;
+﻿using CMApi.ActionFilters;
+using CMApi.Enums;
 using CMApi.Factories;
 using CMApi.Models.DomainModels;
 using CMApi.Models.Responses;
@@ -28,6 +29,7 @@ public class ManagementController : ControllerBase
     }
 
     [HttpGet]
+    [EndpointPerformanceFilter]
     [Route("get-class-overview/{gradeCourseId}")]
     public async Task<ActionResult<OverviewViewmodel>> GetClassOverView(int gradeCourseId)
     {
