@@ -52,7 +52,7 @@ app.UseCors(x =>
      .AllowCredentials());
 
 app.UseRouting();
-
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();

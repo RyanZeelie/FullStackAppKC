@@ -5,11 +5,13 @@ using CMApi.Factories;
 using CMApi.Models.DomainModels;
 using CMApi.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CMApi.Controllers;
 
 
 [TypeFilter(typeof(EndpointPerformanceFilter))]
+[EnableRateLimiting("Fixed")]
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ManagementController : ControllerBase
