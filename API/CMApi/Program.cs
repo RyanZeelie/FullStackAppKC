@@ -3,6 +3,7 @@ using CMApi.Extensions;
 using CMApi.MiddleWare;
 using CMApi.Startup;
 using Hangfire;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
@@ -24,7 +25,12 @@ builder.Services.AddRateLimiter();
 builder.Services.AddAuth(configuration);
 builder.Services.AddCors();
 builder.Services.AddDistributedMemoryCache();
-
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1,0);
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

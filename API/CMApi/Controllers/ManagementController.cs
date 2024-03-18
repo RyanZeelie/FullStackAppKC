@@ -1,15 +1,17 @@
-﻿using CMApi.ActionFilters;
+﻿
+using CMApi.ActionFilters;
 using CMApi.Enums;
 using CMApi.Factories;
 using CMApi.Models.DomainModels;
 using CMApi.Models.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMApi.Controllers;
 
-[Route("api/")]
+
+[TypeFilter(typeof(EndpointPerformanceFilter))]
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ManagementController : ControllerBase
 {
     private readonly IViewModelFactory _viewModelFactory;
@@ -18,7 +20,7 @@ public class ManagementController : ControllerBase
         _viewModelFactory = viewModelFactory;
     }
 
-    [Authorize]
+    [ApiVersion("1.0")]
     [HttpGet]
     [Route("get-dashboard")]
     public async Task<ActionResult<Student>> GetDashboardView()
@@ -28,8 +30,8 @@ public class ManagementController : ControllerBase
         return Ok(dashboardView);
     }
 
+    [ApiVersion("2.0")]
     [HttpGet]
-    [EndpointPerformanceFilter]
     [Route("get-class-overview/{gradeCourseId}")]
     public async Task<ActionResult<OverviewViewmodel>> GetClassOverView(int gradeCourseId)
     {
